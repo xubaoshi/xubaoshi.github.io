@@ -1,15 +1,13 @@
 # Site settings
-title: Clean Blog
+title: STONE'S JOURNEY 
 header-img: img/home-bg.jpg
-email: your-email@yourdomain.com
-copyright_name: Your/Project/Corporate Name
-description: "Write your site description here. It will be used as your sites meta description as well!"
+email: 948869516@qq.com
+copyright_name: baoshi
+description: "Coding and learning"
 baseurl: ""
 url: "http://yourdomain.com"
-twitter_username: SBootstrap
-github_username:  davidtmiller
-facebook_username:  StartBootstrap
-email_username:  your-email@yourdomain.com
+github_username:  xubaoshi
+email_username:  948869516@qq.com
 
 # Google Analytics
 # To enable google analytics, uncomment below line with a valid Google Tracking ID
