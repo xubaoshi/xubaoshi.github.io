@@ -87,16 +87,15 @@ node通过require方法引入模块，require方法内接受一个表示符作�
 **自定义模块**指非核心模块同时也不是路径形式的模块，属于一种特殊的文件模块，可能是一个文件或者包的形式，查找最费时，也是最慢的一种。
 
 **NODE_PATH** <br>
-
 操作系统中都会有一个环境变量，当系统调用一个命令时，就会在PATH变量中寻找，如果注册路径中存在则调用，如果没有就提示命令没有找到。<br>
-NODE_PATH就是node中模块所提供的注册路径环境变量。使用`:`进行分割不同的路径。
+NODE_PATH就是node中模块所提供的注册路径环境变量。使用`;`进行分割不同的路径。
 
 	module.paths
 **windows系统下**<br>
 
 ![](http://i.imgur.com/tbG3eHu.png)
 
-当前目录下的node_modules,上级目录的node_modules,逐级查找直至到根目录的node_modules。文件目录越深，文件查找耗时越多，如果还没有查找到指定模块的话，就会去 NODE_PATH中注册的路径中查找。
+如果寻找一个文件，nodejs首先会从当前目录下的node_modules、上级目录的node_modules,逐级查找直至到根目录的node_modules。文件目录越深，文件查找耗时越多，如果还没有查找到指定模块的话，就会去 NODE_PATH中注册的路径中查找，因此去NODE_PAtH中首次（找到后会进行缓存）查找也是最慢的。
 
 <h3> 5.1 文件扩展名分析 </h3>
 如果require() 方法内的参数不添加标识符，Node会按照.js、.json、.node的顺序依次加载。
