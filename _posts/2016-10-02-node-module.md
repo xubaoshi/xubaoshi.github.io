@@ -9,6 +9,7 @@ header-img: "img/node-module.jpg"
 # nodejs 模块机制 #
 ## 1.AMD、CMD、CommonJS  模块规范 ##
 ### CommonJS规范 ###
+
 CommonJS规范是2009年开始提出的，最初的名字叫ServerJS，后期重命名为CommonJS，CommonJS认为一个单独的文件就是一个模块,每一个模块都是一个单独的作用域。加载模块使用require()方法，该方法读取一个文件并编译执行，最终返回文件内部的exports对象。nodejs就是采用了CommonJS的规范。
 
 	//    filename: foo.js
@@ -26,7 +27,9 @@ CommonJS规范是2009年开始提出的，最初的名字叫ServerJS，后期重
 	var foo = require('./foo');
 	foo.myFunc();
 CommonJS加载的方式采用的是同步的方式，只有资源加载完成才能执行后面的操作，nodejs主要用来做服务端的编程，所依赖的文件大多都在本地，因此读取速度快，不需要考虑异步加载。但是如果此方案用在浏览器端，文件加载时间未知可能会导致浏览器页面处于卡死的状态。于是后面就有了AMD规范与CMD规范。
+
 ### AMD规范 ###
+
 是在requirejs在推广的过程中产出的。AMD异步加载模块，requirejs使用define进行模块定义。
 	
 	define(['jquery','underscore'],function($,_){
@@ -39,7 +42,9 @@ AMD推崇依赖前置，但AMD依然支持依赖就近（官方推荐依赖前�
 		var $ = require('jquery');
 		var _ = require('underscore');
 	}
+
 ### CMD规范 ###
+
 是在seajs在推广的过程中产出的。
 	
 	define(function(require,exports,module)){
@@ -80,7 +85,6 @@ node通过require方法引入模块，require方法内接受一个表示符作�
 **路径形式的文件模块**以`.` 、`..` 、`/`开始的标识符都会当做文件模块来处理，在分析路径模块时，require()方法会将路径转为真实路径进行编译，编译执行后的结果会存储在缓存中，以使二次加载更快。 
 由于文件模块给node指明了确切的文件位置，查找过程可以大量的节约时间，其速度仅此于核心模块。<br>
 **自定义模块**指非核心模块同时也不是路径形式的模块，属于一种特殊的文件模块，可能是一个文件或者包的形式，查找最费时，也是最慢的一种。
-
 
 **NODE_PATH** <br>
 
