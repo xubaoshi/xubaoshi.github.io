@@ -9,6 +9,7 @@ header-img: "img/node-module.jpg"
 # nodejs 模块机制 #
 
 <h2> 1.AMD、CMD、CommonJS  模块规范 </h2>
+关于js为什么要引入模块化规范，请参考  [https://github.com/xubaoshi/xubaoshi.github.io.git](https://github.com/xubaoshi/xubaoshi.github.io.git)。
 <h3> CommonJS规范 </h3>
 CommonJS规范是2009年开始提出的，最初的名字叫ServerJS，后期重命名为CommonJS，CommonJS认为一个单独的文件就是一个模块,每一个模块都是一个单独的作用域。加载模块使用require()方法，该方法读取一个文件并编译执行，最终返回文件内部的exports对象。nodejs就是采用了CommonJS的规范。
 
