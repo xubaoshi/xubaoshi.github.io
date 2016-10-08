@@ -67,14 +67,14 @@ CMD推崇依赖就近。
 运行时动态加载，需要完整的路径分析、文件定位、编译执行过程，速度比核心模块慢。
 <h2> 4. 优先从缓存加载 </h2>	
 Node对引入过的模块进行缓存，以减少引入时的开销。浏览器缓存的仅仅是缓存文件，而Node缓存的是编译执行后的对象。
-<h2> 5. 路径分析文件定位 </h2>
+<h2> 5. 路径分析与文件定位 </h2>
 <h3> 5.1 模块标识符分析 </h3>
-node通过require方法引入模块，require方法内接受一个表示符作为参数，node基于此标识符进行模块的分析与定位。<br>
+node通过require方法引入模块，require方法内接受一个标识符作为参数，node基于此标识符进行模块的分析与定位。<br>
 
 	var path = require('path');                                                            // 核心模块  http、fs、path等
 	var test1 = require('./test1.json');                                                   // . 或 .. 开始的相对路径的文件模块
 	var test2 = require('../test2.json');
-	var test3 = require('E:/code/learn/project/js/node/module/test/test3.json');           // 以/开始的绝对路径
+	var test3 = require('E:/code/learn/project/js/node/module/test/test3.json');           // 绝对路径
 	var walk = require('walk');                                                            // 非路径形式的walk模块
 
 **核心模块**的优先级仅次于缓存加载，由于Node的源码编译过程中已经将其编译为二进制编码，因此其加载过程最快。ps:http(node中的核心模块)，如果自定义该模块，引入时如果希望加载成功，必须选择一个不同的标识符或者通过路径引用的方式引用该模块<br>
@@ -99,9 +99,9 @@ NODE_PATH就是node中模块所提供的注册路径环境变量。使用`;`进�
 
 如果寻找一个文件，nodejs首先会从当前目录下的node_modules、上级目录的node_modules,逐级查找直至到根目录的node_modules。文件目录越深，文件查找耗时越多，如果还没有查找到指定模块的话，就会去 NODE_PATH中注册的路径中查找，因此去NODE_PAtH中首次（找到后会进行缓存）查找也是最慢的。
 
-<h3> 5.1 文件扩展名分析 </h3>
+<h3> 5.2 文件扩展名分析 </h3>
 如果require() 方法内的参数不添加标识符，Node会按照.js、.json、.node的顺序依次加载。
-<h3> 5.1 目录分析和包 </h3>
+<h3> 5.3 目录分析和包 </h3>
 1.通过require()方法进行查找文件所得到的可能不是一个文件而是一个目录，这时node会将这个目录当做一个包进行处理。<br>
 首先node会在当前的目录下查找package.json文件，通过JSON.parse()方法将package.json进行解析成描述该包的对象，从该对象main属性指定的文件进行定位。<br>2.如果没有package.json,node会认为index当做默认的文件名，依次去查找.js、.json、.node文件。<br>3.如果在此目录分析过程中没有定位到任何文件的话，node会进入下一个模块路径进行查找。如果没有找到则直接抛错查找异常。<br>
 ![](http://i.imgur.com/TtkpN07.png)
