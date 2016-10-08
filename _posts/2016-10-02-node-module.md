@@ -32,14 +32,15 @@ CommonJS规范是2009年开始提出的，最初的名字叫ServerJS，后期重
 
 <h3> AMD规范 </h3>
 
-是在requirejs在推广的过程中产出的。AMD异步加载模块，requirejs使用define进行模块定义。
+是在requirejs在推广的过程中产出的。AMD异步加载模块，AMD是提前执行的。
 	
 	define(['jquery','underscore'],function($,_){
 	
 	})
 
-AMD推崇依赖前置，但AMD依然支持依赖就近（官方推荐依赖前置即遵循CommonJS规范）。
+AMD推崇依赖前置，但AMD依然支持依赖就近（官方推荐依赖前置即遵循CommonJS规范,由RequireJS 从 2.0增加）。
 
+	// RequireJS 2.0
 	define(function(require,exports,module)){
 		var $ = require('jquery');
 		var _ = require('underscore');
@@ -47,7 +48,7 @@ AMD推崇依赖前置，但AMD依然支持依赖就近（官方推荐依赖前�
 
 <h3> CMD规范 </h3>
 
-是在seajs在推广的过程中产出的。
+是在seajs在推广的过程中产出的，cmd是延迟执行的。
 	
 	define(function(require,exports,module)){
 		var $ = require('jquery');
