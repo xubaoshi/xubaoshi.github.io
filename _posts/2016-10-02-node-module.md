@@ -93,6 +93,7 @@ node通过require方法引入模块，require方法内接受一个标识符作�
 NODE_PATH就是node中模块所提供的注册路径环境变量。使用`;`进行分割不同的路径。
 
 	module.paths
+
 **windows系统下**<br>
 
 ![](http://i.imgur.com/tbG3eHu.png)
