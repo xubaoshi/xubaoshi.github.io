@@ -164,6 +164,6 @@ node在运行时会解析bin属性所对应的文件路径加入到系统的PATH
 
 
 	// 查看全局安装模式包的位置
-	node root -g
+	npm root -g
 
 ![](http://i.imgur.com/AZ8oNYR.jpg)
