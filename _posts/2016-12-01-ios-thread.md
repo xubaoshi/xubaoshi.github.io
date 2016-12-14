@@ -1,12 +1,12 @@
 ---
 layout:     post
-title:      "IOS Thread Learn"
+title:      "ios thread learn"
 date:       "2016-12-01 19:52:00"
 author:     "XuBaoshi"
 header-img: "img/home-bg.jpg"
 ---
 
-## IOS Thread Learn ##
+## ios thread learn ##
 1. pThread
 2. NSThread
 3. GCD
@@ -219,7 +219,7 @@ header-img: "img/home-bg.jpg"
 		NSLog(@"request done!")
 		dipatch_group_leave(group)
 	}];
-
+<br>
 #### GCD 单例模式及延迟执行 ####
 **单例模式**
 
@@ -262,7 +262,7 @@ header-img: "img/home-bg.jpg"
 NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能够以并发或非并发的方式执行操作。
 通过使用NSOperation子类来调用其内部的方法。<br>
 1.NSInvocationOperation & NSBlockOperation (自带方法)<br>
-2.自定义类继承NSOperation<br>
+2.自定义类继承NSOperation<br><br>
 **NSInvocationOperation**<br>
 
 		// 非并发执行
