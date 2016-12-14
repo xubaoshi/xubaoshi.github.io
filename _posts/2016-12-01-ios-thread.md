@@ -285,7 +285,7 @@ NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能
 		-(void) invocationAction {
 			for (int i=0;i<3;i++){
 				NSLog(@"invocation %d",i);
-				[NSTread sleepForTimeInterval：1]；
+				[NSTread sleepForTimeInterval：1];
 			}
 		}
 
@@ -303,7 +303,7 @@ NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能
 				NSBlockOperation *blockOper = [NSBlockOperation blockOperationWithBlock:^{
 					for (int i=0;i<3;i++){
 						NSLog(@"invocation %d",i);
-						[NSTread sleepForTimeInterval：1]；
+						[NSTread sleepForTimeInterval：1];
 					}
 				}];
 		
@@ -343,28 +343,28 @@ ready、cancelled、executing、finished、asynchronous
 	NSBlockOperation *customOperA = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperA %d",i);
-			[NSTread sleepForTimeInterval：1]；
+			[NSTread sleepForTimeInterval：1];
 		}
 	}];
 
 	NSBlockOperation *customOperB = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperB %d",i);
-			[NSTread sleepForTimeInterval：1]；
+			[NSTread sleepForTimeInterval：1];
 		}
 	}];
 
 	NSBlockOperation *customOperC = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperC %d",i);
-			[NSTread sleepForTimeInterval：1]；
+			[NSTread sleepForTimeInterval：1];
 		}
 	}];
 
 	NSBlockOperation *customOperD = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperD %d",i);
-			[NSTread sleepForTimeInterval：1]；
+			[NSTread sleepForTimeInterval：1];
 		}
 	}];
 	
