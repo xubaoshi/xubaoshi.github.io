@@ -327,7 +327,7 @@ NSOperationQueue 可以理解成线程池，创建线程后可以将线程添加
 	}
 	
 	// 上述代码创建的线程
-	[self.operQueue addOperation:blockOper]；
+	[self.operQueue addOperation:blockOper];
 
 
 状态<br>
