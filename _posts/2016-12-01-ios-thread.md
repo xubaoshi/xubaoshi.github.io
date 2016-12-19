@@ -74,11 +74,11 @@ header-img: "img/home-bg.jpg"
 
 
 ### GCD ###
-苹果提出的更加有效的利用多核CPU的技术，线程自动管理如：创建线程、任务调度、销毁线程等，使用更加方便和灵活。<br>
+苹果提出的更加有效的利用多核CPU的技术，线程自动管理如:创建线程、任务调度、销毁线程等，使用更加方便和灵活。<br>
 
 #### 简单使用方法 ####
-同步及异步任务：<br>
-串行及并行任务：<br>
+同步及异步任务:<br>
+串行及并行任务:<br>
 
 	// dispatch_get_main_queue & dispatch_get_global_queue
 	// oc
@@ -285,7 +285,7 @@ NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能
 		-(void) invocationAction {
 			for (int i=0;i<3;i++){
 				NSLog(@"invocation %d",i);
-				[NSTread sleepForTimeInterval：1];
+				[NSTread sleepForTimeInterval:1];
 			}
 		}
 
@@ -303,7 +303,7 @@ NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能
 				NSBlockOperation *blockOper = [NSBlockOperation blockOperationWithBlock:^{
 					for (int i=0;i<3;i++){
 						NSLog(@"invocation %d",i);
-						[NSTread sleepForTimeInterval：1];
+						[NSTread sleepForTimeInterval:1];
 					}
 				}];
 		
@@ -313,7 +313,7 @@ NSOperation是GCD的一种封装，封装了实例执行的操作及数据，能
 		
 ![](http://i.imgur.com/6jMZAgP.png)
 
-**相关概念：**<br>
+**相关概念:**<br>
 NSOperationQueue 可以理解成线程池，创建线程后可以将线程添加至队列中。
 	
 	a.addOperation // 添加至线程池
@@ -343,28 +343,28 @@ ready、cancelled、executing、finished、asynchronous
 	NSBlockOperation *customOperA = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperA %d",i);
-			[NSTread sleepForTimeInterval：1];
+			[NSTread sleepForTimeInterval:1];
 		}
 	}];
 
 	NSBlockOperation *customOperB = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperB %d",i);
-			[NSTread sleepForTimeInterval：1];
+			[NSTread sleepForTimeInterval:1];
 		}
 	}];
 
 	NSBlockOperation *customOperC = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperC %d",i);
-			[NSTread sleepForTimeInterval：1];
+			[NSTread sleepForTimeInterval:1];
 		}
 	}];
 
 	NSBlockOperation *customOperD = [NSBlockOperation blockOperationWithBlock:^{
 		for (int i=0;i<3;i++){
 			NSLog(@"OperD %d",i);
-			[NSTread sleepForTimeInterval：1];
+			[NSTread sleepForTimeInterval:1];
 		}
 	}];
 	
