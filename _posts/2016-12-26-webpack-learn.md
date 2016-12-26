@@ -10,7 +10,8 @@ header-img: "img/webpack.jpg"
 
 ### babel-polyfill 与 babel-runtime 区别###
 <p>
-babel转译后的代码要实现源代码同样的功能需要借助一些函数</p>
+babel转译后的代码要实现源代码同样的功能需要借助一些函数
+</p>
 	
 	{[name]:'JavaScript'}
 
@@ -31,7 +32,7 @@ babel转译后的代码要实现源代码同样的功能需要借助一些函数
 
 	var obj = _defineProperty({},'name','JavaScript')
 
-类似上面`_defineProperty`可能会重复出现在一些模块里，导致编译后代码体积变大。Babel提供了单独的包 babel-runtime 供编译模块复用工具函数。
+类似上面`_defineProperty`可能会重复出现在一些模块里，导致编译后代码体积变大。babel提供了单独的包 babel-runtime 供编译模块复用工具函数。
 
 
 	// 使用babel-plugin-transform-runtime 使用babel-runtime转译后
