@@ -66,7 +66,7 @@ header-img: "img/webpack.jpg"
 **cmd 命令：<br>**
 ![](http://i.imgur.com/pz5n8JT.png)
 
-content-base 设定 webpack-dev-server 伺服的 directory，上图设置为当前根目录
+content-base 设定 webpack-dev-server 伺服的 directory，上图设置为当前根目录。
 
 ## babel-polyfill 与 babel-runtime 区别##
 <p>
