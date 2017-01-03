@@ -7,7 +7,9 @@ header-img: "img/webpack.jpg"
 ---
 
 # webpack 问题汇总 #
-## webpack文件路径 ##
+
+## webpack文件路径 区别##
+
 在开发阶段使用webpack时通常会使用`hot replace`（热重载），即通过一个http服务器(nodejs)伺服资源文件，当原始文件作出的改动服务器会以某种方式（websocket）通知客户端（浏览器）刷新页面重新更新资源。搭建nodejs服务器可以结合webpack提供的api自己搭建，也可以使用webpack-dev-server（基于express的http服务器），通常会选择webpack-dev-server，刚接触webpack时一些路径的配置的原因很容易弄混：下面给出了需要注意的webpack及webpack-dev-server相关配置项：
 
 **有一点需要注意的是WEBPACK-DEV-SERVER实时编译后生成的文件都存在内存中。**
