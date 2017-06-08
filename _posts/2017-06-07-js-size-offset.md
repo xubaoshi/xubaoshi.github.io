@@ -27,10 +27,9 @@ header-img: "img/post-bg-02.jpg"
 
 ## 定位父级 ##
 offsetParent可以理解为当前元素经过定位的(position!= static)最近的上级元素。<br>
-1. 如果当前元素(position=fixed),offsetParent结果为null;<br>
-2. 如果当前的元素的上级position都为static，则offsetParent结果为body元素
+1 如果当前元素(position=fixed),offsetParent结果为null;<br>
+2 如果当前的元素的上级position都为static，则offsetParent结果为body元素<br>
 
-		
 	<body>
 		<div id="wrap" style="position:relative;">
 			<div class="fold">
@@ -44,6 +43,7 @@ offsetParent可以理解为当前元素经过定位的(position!= static)最近�
 
 	// jquery
 	$('#artical').offsetParent();
+
 
 ## offsetTop 与 jquery $(dom).offset().top ##
 offsetTop可以理解为当前元素到经过定位的(position!= static)最近的上级元素距离。<br>
