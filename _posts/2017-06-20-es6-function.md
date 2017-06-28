@@ -227,7 +227,7 @@ new.target获取当前new的那个目标构造器
 	"use strict"
 	// .....
 	
-<img src="/img/es6-function/block-level.PNG" style="display:block;"/>
+<img src="/img/es6-function/block-level.png" style="display:block;"/>
 
 
 	// es6
