@@ -78,7 +78,7 @@ header-img: "img/post-bg-02.jpg"
 	console.log(add(undefined,1)); // throw errors
 上述代码当first为undefined，初始化时需要second对其进行初始化，但此时second还没有存在当前上下文。<br>
 
-<img src="../img/es6-function/param-tdz.png" style="display:block;"></img>
+<img src="/img/es6-function/param-tdz.png" style="display:block;"/>
 
 <h2>Rest Parameters(剩余参数)</h2>
 
@@ -126,7 +126,7 @@ header-img: "img/post-bg-02.jpg"
   		console.log(last);
 	}
 
-<img src="../img/es6-function/param-rest.jpg" style="display:block;"></img>
+<img src="/img/es6-function/param-rest.jpg" style="display:block;" />
 
 <h2>The Spread Operator(展开运算符)</h2>
 1. 展开运算符（spread operator）允许一个表达式在某处展开。展开运算符在多个参数（用于函数调用）或多个元素（用于数组字面量）或者多个变量（用于解构赋值）的地方可以使用。<br>
@@ -227,7 +227,7 @@ new.target获取当前new的那个目标构造器
 	"use strict"
 	// .....
 	
-<img src="../img/es6-function/block-level.png" style="display:block;"></img>
+<img src="/img/es6-function/block-level.png" style="display:block;"/>
 
 
 	// es6
