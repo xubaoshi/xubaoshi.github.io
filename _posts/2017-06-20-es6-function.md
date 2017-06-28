@@ -16,7 +16,7 @@ header-img: "img/post-bg-02.jpg"
 		// ..... 
 	}
 
-	// 当参数为timeout为0时上面的设置的参数变为2000，在这种情况下，存在问题的保险的做法如下：
+	// 当参数为timeout为0时上面的设置的参数变为2000，在这种情况下存在问题,保险的做法如下：
 	
 	// es5 safer
 	function makeRequest(url,timeout,callback){
@@ -132,6 +132,8 @@ header-img: "img/post-bg-02.jpg"
 1. 展开运算符（spread operator）允许一个表达式在某处展开。展开运算符在多个参数（用于函数调用）或多个元素（用于数组字面量）或者多个变量（用于解构赋值）的地方可以使用。<br>
 2. 展开运算符不能用在对象当中，因为目前展开运算符只能在可遍历对象（iterables）可用。iterables的实现是依靠[Symbol.iterator]函数，而目前只有Array,Set,String内置[Symbol.iterator]方法，而Object尚未内置该方法，因此无法使用展开运算符。不过ES7草案当中已经加入了对象展开运算符特性。
 
+
+
 	var value1 = 25,value2=50;
 	console.log(Math.max(value1,value2));  //50
 
@@ -146,6 +148,8 @@ header-img: "img/post-bg-02.jpg"
 	// es6
 	console.log(Math.max(...valArr));//50
 	console.log(Math,max(...valArr,200)); //200
+
+
 
 <h2>函数名</h2>
 
@@ -224,8 +228,8 @@ new.target获取当前new的那个目标构造器
 	console.log(typeof doSomeThing);  // "function"
 
 	//es5  strict
-	"use strict"
-	// .....
+	"use strict"    // throw error
+	// .....      
 	
 <img src="/img/es6-function/block-level.png" style="display:block;"/>
 
@@ -257,12 +261,12 @@ new.target获取当前new的那个目标构造器
 从上述代码可以看出严格模式下，es6中的块级作用域对函数声明有效。
 
 <h2>箭头函数</h2>
-1.没有super、arguments and new.target 这些对象为离他最近的非箭头函数所定义的。
-2.不能使用new调用。
-3.没有prototype。
-4.this不能被更改。
-5.没有arguments对象只能使用命名过的参数或者剩余参数。
-6.不允许存在重复的参数
+1.没有super、arguments and new.target 这些对象为离他最近的非箭头函数所定义的。<br/>
+2.不能使用new调用。<br/>
+3.没有prototype。<br/>
+4.this不能被更改。<br/>
+5.没有arguments对象只能使用命名过的参数或者剩余参数。<br/>
+6.不允许存在重复的参数。<br/>
 
 	// arrow function
 	let reflect1 = value => console.log(value);
