@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <script>
+    let person = {
+        name:'person',
+        getGreeting() {
+            return "Hello";
+        }
+    };
+    // prototype is person
+    let friend = {
+        name:'friend',
+        getGreeting() {
+            return super.getGreeting() + ", hi!";
+        }
+    };
+    Object.setPrototypeOf(friend, person);
+    let relative = Object.create(friend);
+
+    console.log(friend.getGreeting()); // "Hello"
+    console.log(friend.getGreeting()); // "Hello hi!"
+    console.log(relative.getGreeting()); // error!
+    </script>
+</body>
+
+</html>
