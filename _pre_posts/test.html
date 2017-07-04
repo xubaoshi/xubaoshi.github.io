@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            function Box(name, age) {
+                // Box.prototype.name = name;
+                // Box.prototype.age = age;
+                // Box.prototype.run = function(){
+                //      this.name = this.age + 'ing';
+                //      console.log(this.name);
+                //      console.log(this.age);
+                // }
+
+                this.name = name;
+                this.age = age;
+                this.run = function () {
+                    this.name = this.age + 'ing';
+                    console.log(this.name);
+                    console.log(this.age);
+                }
+            }
+            Box.prototype.runTo = function(){
+                 this.name = this.age + 'ing';
+                 console.log(this.name);
+                 console.log(this.age);
+            }
+
+            var box1 = new Box('wang', 23);
+            box1.run();
+        }
+    </script>
+</body>
+
+</html>
