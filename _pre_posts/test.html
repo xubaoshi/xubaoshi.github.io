@@ -10,31 +10,23 @@
 <body>
     <script>
         window.onload = function () {
-            function Box(name, age) {
-                // Box.prototype.name = name;
-                // Box.prototype.age = age;
-                // Box.prototype.run = function(){
-                //      this.name = this.age + 'ing';
-                //      console.log(this.name);
-                //      console.log(this.age);
-                // }
-
-                this.name = name;
-                this.age = age;
-                this.run = function () {
-                    this.name = this.age + 'ing';
-                    console.log(this.name);
-                    console.log(this.age);
+            let RegObj = {
+                [Symbol.split](value, spliter) {
+                    var index = value.indexOf(spliter);
+                    if (index === -1) {
+                        return value;
+                    }
+                    return [
+                        value.substr(0, index),
+                        value.substr(index + spliter.length)
+                    ];
                 }
             }
-            Box.prototype.runTo = function(){
-                 this.name = this.age + 'ing';
-                 console.log(this.name);
-                 console.log(this.age);
-            }
 
-            var box1 = new Box('wang', 23);
-            box1.run();
+            console.log('foobar'.split(RegObj, 'foo')); //["", "bar"]
+            console.log('foobar'.split(RegObj, 'bar')); //["foo", ""]
+            console.log('foobar'.split(RegObj, 'baz')); //["", ""]
+
         }
     </script>
 </body>
