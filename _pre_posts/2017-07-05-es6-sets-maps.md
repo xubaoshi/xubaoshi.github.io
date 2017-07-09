@@ -92,6 +92,33 @@ forEach方法有三个参数，与数组Array的forEach方法相似，1、键值
     let set = new Set([1,2,3,3,3,4,5]);
     let array = [...set];
     console.log(array); // [1,2,3,4,5]
-<h2>Weak Set</h2>
 
+<h2>Weak Set</h2>
+WeakSet 结构与 Set 类似，也是不重复的值的集合。但是，它与 Set 有两个区别。首先，WeakSet 的成员只能是对象，而不能是其他类型的值,其次WeakSet 中的对象是弱引用，即如果其他对象都不再引用该对象那么垃圾回收机制会自动回收该对象占用的内存，不考虑该对象是否存在于WeakSet之中。
+
+    // Set
+    let set = new Set(),key = {};
+    set.add(key);
+    console.log(key);  // Object {}
+    console.log(set.size); // 1
+
+    // 设置key=null
+    key = null;
+
+    console.log(set.size); // 1
+    key = [...set][0]; 
+    console.log(key); // Object {}
+
+从上述代码可以看出，虽然将key设置为null,但set内依旧保留着在key没有被设置为null之前的引用，依旧可以通过展开运算符转换为数组。但有的时候set的这种模式并不是一个很好的方式，比如在操作Dom的时候，有的时候你并不需要知道Dom被修改后之前的dom状态是什么样子的。
+
+    // WeakSet
+    let set = new WeakSet(),key = {};
+    set.add(key);
+    console.log(key);  // Object {}
+    console.log(set.has(key)); //true
+    console.log(set);  
+
+    // 设置key=null
+    key = null;
+    console.log(set.has(key)); // false
 <h2>Map</h2>
