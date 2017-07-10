@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <script src="../js/jquery.min.js"></script>
+    <script>
+        $(function () {
+            var data = [{
+                id: '201706',
+                name: '二零一七年六月'
+            }, {
+                id: '201707',
+                name: '二零一七年七月'
+            }];
+            var $body = $('body');
+            var template = '',result = '';
+            data.forEach(function(obj){
+              template +=  `<li>${obj.name}</li>`
+            })
+            result = `<ul>${template}</ul>`
+            $body.append($(result));
+        });
+    </script>
+</body>
+
+</html>
