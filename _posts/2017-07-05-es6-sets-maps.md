@@ -121,8 +121,16 @@ WeakSet 结构与 Set 类似，也是不重复的值的集合。但是，它与 
     // 设置key=null
     key = null;
     console.log(set.has(key)); // false
+<ol>
+    <li>如果使用WeakSet实例 add、has、delete方法时传递非对象参数将会抛错。</li>
+    <li>WeakSet不能使用for of方法。</li>
+    <li>WeakSet不能使用迭代器相关方法如：keys、values、methods。</li>
+    <li>WeakSet不能使用forEach方法。</li>
+    <li>WeakSet不能使用size方法。</li>
+</ol>
+
 <h2>Map</h2>
-Map类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。Map中判断键值是否相等采用的是严格模式即"===";
+Map类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。Map中判断键值是否相等采用的Object.is()方法相同的模式进行判断;
 <h3>基础</h3>
 
     // 创建
@@ -283,7 +291,13 @@ WeakMap其实是WeakSet是相似的，WeakMap中每一个键值必须是一个�
     console.log(map.get(dom1)); // undefined
     console.log(map.get(dom1)); // undefined
 
-   
+<ol>
+    <li>如果使用WeakMap实例 add、has、delete方法时传递非对象参数将会抛错。</li>
+    <li>WeakMap不能使用for of方法。</li>
+    <li>WeakMap不能使用迭代器相关方法如：keys、values、methods。</li>
+    <li>WeakMap不能使用forEach方法。</li>
+    <li>WeakMap不能使用size方法。</li>
+</ol>
      
 
     
