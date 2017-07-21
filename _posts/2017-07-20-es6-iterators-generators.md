@@ -120,7 +120,7 @@ ps:如果for of应用在没有Symbol.iterator接口的数据结构上将会抛�
         console.log(value);
     }
 
-<img src="../img/iterators-generators/iterator-for-of-01.jpg" style="display:block;"/>
+<img src="/img/iterators-generators/iterator-for-of-01.jpg" style="display:block;"/>
 
 
 <h4>默认的Iterator</h4>
@@ -327,9 +327,9 @@ ES6的目标是对Unicode全面支持，字符串的内置迭代器也是基于�
     console.log(iterator.next(4)); // "{ value: 6, done: false }"
     console.log(iterator.throw(new Error("Boom"))); // error thrown from generator
 
-<img src="../img/iterators-generators/iterator-throw-error02.jpg" style="display:block;"/><br/>>
+<img src="/img/iterators-generators/iterator-throw-error02.jpg" style="display:block;"/><br/>
 
-<img src="../img/iterators-generators/iterator-throw-error01.jpg" style="display:block;"/>
+<img src="/img/iterators-generators/iterator-throw-error01.jpg" style="display:block;"/>
 
 从第二张图可以看出 当执行 throw时 second变量还未生成，最后一个yield永远都不会被执行。可以在generator内添加try catch操作进行异常处理。
 
