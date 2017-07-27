@@ -425,3 +425,112 @@ generators其实是函数，在generators内部执行return语句意味着所有
     console.log(iterator.next()); // "{ value: "repeat", done: false }"
     console.log(iterator.next()); // "{ value: undefined, done: true }"
 
+<h2>异步任务</h2>
+执行异步的传统方式是调用一个包含回调的函数。
+
+        let fs = require('fs');
+        fs.readFile(__dirname + '/config.json', function (err, contents) {
+            if (err) {
+                throw err;
+            }
+            doSomething(contents);
+        })
+
+        function doSomething(contents) {
+            console.log(contents);
+        }
+
+<h3>简单的任务运行器</h3>
+由于yield能停止运行，并在重新开始运行前等待next()方法被调用。
+
+    function run(taskDef){
+        // 创建迭代器
+        let task = taskDef();
+        // 启动任务
+        let result = task.next();
+        
+        // 执行递归函数
+        function step(){
+            if(!result.done){
+                result = task.next();
+                step();
+            }
+        }
+        step();
+    }
+
+run函数接受一个generator,通过调用generator生成一个迭代器，并将迭代器存放在 task 变量上。第一次对next()调用启动了迭代器，并将结果存储到一个变量中，如果结果的done属性一直为false，step将递归调用自身之前调用next()方法。
+
+    run(function *(){
+        console.log(1);
+        yield;
+        console.log(2);
+        yield;
+        console.log(3);
+    })
+
+<h3>带数据的任务运行器</h3>
+
+    function run(taskDef){
+        let task = taskDef();
+        let result = task.next();
+        function step(){
+            if(!result.done){
+                result = task.next(result.value);
+                step();
+            }
+        }
+        step();
+    }
+
+    run(function *(){
+        let value = yield 1;
+        console.log(value); // 1
+        value = yield value + 3;
+        console.log(value); // 4
+    })
+
+从上述代码中next通过传递result.value,迭代器内第二个yield可以调用并进行计算。
+
+<h3>异步任务运行器</h3>
+上面的例子yield之间来回传递的都是静态数据，但yield处理一个异步的任务与之前是有不同的，任何打算让 run() 调用的函数，都应该返回能够执行回调函数的函数。
+
+    function run(taskDef) {
+        let task = taskDef();
+        let result = task.next();
+        function step() {
+            if(!result.done){
+                if(typeof result.value === 'function'){
+                    result.value(function(err,data){
+                        if(err){
+                            result = task.throw(err);
+                            return;
+                        }
+                        result = task.next(data);
+                        step();
+                    })
+                } else {
+                    result = task.next(result.value);
+                    step();
+                }
+            }
+        }
+        step();
+    }
+
+    let fs = require('fs');
+    function readFile(filename){
+        return function(callback){
+            fs.readFile(filename,callback);
+        }
+    }
+
+    run(function *(){
+        let contents = yield readFile(__dirname + '/config.json');
+        let result = yield contents;
+        doSomething(result);
+    })
+
+    function doSomething(contents) {
+        console.log(contents);
+    }
