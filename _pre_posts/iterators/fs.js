@@ -1,5 +1,5 @@
 let fs = require('fs');
-fs.readFile(__dirname + '/config.json', function (err, contents) {
+fs.readFile(__dirname + '/config.json', 'utf-8',function (err, contents) {
     if (err) {
         throw err;
     }

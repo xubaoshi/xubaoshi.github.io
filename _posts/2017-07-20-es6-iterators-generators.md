@@ -7,7 +7,7 @@ header-img: "img/post-bg-07.jpg"
 ---
 <h1>iterators-generators</h1>
 <h2>iterators(迭代器)</h2>
-<p>迭代器是一种一种机制，它为各种不同数据结构提供统一的访问机制。如果该数据结构部署了Iterator接口那么该数据结构便可以完成遍历数据结构成员操作。</p>
+<p>迭代器是一种机制，它为各种不同数据结构提供统一的访问机制。如果该数据结构部署了Iterator接口那么该数据结构便可以完成遍历数据结构成员操作。</p>
 <p>所有的迭代器都有一个next()方法，每次调用该方法后返回一个对象，该对象包含两个属性：value属性指的是当前成员的值，done属性是一个boolean值指的是遍历是否结束。当遍历结束后再次调用next()方法时，返回的对象value属性为undefined,done属性为true</p>
 以上述想法使用es5实现迭代器如下：
 
@@ -79,6 +79,8 @@ generators 是一个返回迭代器的函数，与不同函数不同的是声明
 
     let iterator = createIterator([1,2,3]);
     console.log(iterator.next()); // "Uncaught SyntaxError: Unexpected identifier"
+
+<img src="/img/iterators-generators/generator-function.jpg" />
 
 <h3>在对象中使用generator</h3>
 
@@ -269,6 +271,7 @@ es6为arrays、maps、sets提供内置的返回迭代器的方法。
     for(let [key,value] of data){
         console.log(key + ':' + value);
     }
+
 <h3>字符串的迭代器</h3>
 ES6的目标是对Unicode全面支持，字符串的内置迭代器也是基于此目标的尝试。
 
@@ -313,8 +316,9 @@ ES6的目标是对Unicode全面支持，字符串的内置迭代器也是基于�
     let iterator = createIterator();
     console.log(iterator.next()); // "{ value: 1, done: false }"
     console.log(iterator.next(4)); // "{ value: 6, done: false }"
-    console.log(iterator.next(5)); // "{ value: 6, done: false }"
+    console.log(iterator.next(5)); // "{ value: 8, done: false }"
     console.log(iterator.next()); // "{ value: undefined, done: true }"
+
 <h3>在迭代器内抛错</h3>
 
     function *createIterator() {
@@ -429,7 +433,7 @@ generators其实是函数，在generators内部执行return语句意味着所有
 执行异步的传统方式是调用一个包含回调的函数。
 
         let fs = require('fs');
-        fs.readFile(__dirname + '/config.json', function (err, contents) {
+        fs.readFile(__dirname + '/config.json', 'utf-8',function (err, contents) {
             if (err) {
                 throw err;
             }
