@@ -36,7 +36,7 @@ header-img: "img/post-bg-07.jpg"
 
 <h2>generators</h2>
 <h3>基础</h3>
-generators 是一个返回迭代器的函数，与不同函数不同的是声明generators函数要在function后面添加"*",同时函数内部使用es6新增加的关键字yield来控制next()方法的返回值。
+generators 是一个返回迭代器的函数，与普通函数不同的是声明generators函数要在function后面添加"*",同时函数内部使用es6新增加的关键字yield来控制next()方法的返回值。
 
     // generator 函数
     function *createIterator(){
@@ -294,6 +294,7 @@ ES6的目标是对Unicode全面支持，字符串的内置迭代器也是基于�
     }
     // A
     // ""
+    // 𠮷
     // ""
     // B
 
