@@ -6,7 +6,7 @@ module.exports = {
         'react-hot-loader/patch',
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
-        './index.jsx'
+        './render.jsx'
     ],
     output: {
         filename: 'bundle.js',
@@ -16,11 +16,11 @@ module.exports = {
     resolve: {
         extensions: [".js", ".jsx", ".json"]
     },
-    context: resolve(__dirname, '../src'),
+    context: resolve(__dirname, 'src'),
     devtool: 'inline-source-map',
     devServer: {
         hot: true,
-        contentBase: resolve(__dirname, '../src'),
+        contentBase: resolve(__dirname, './src'),
         publicPath: '/'
     },
     module: {
@@ -38,10 +38,8 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin({
-            title: 'cnode',
             filename: '../dist/index.html',
             template: 'index.html',
-            favicon: 'favicon.ico',
             minify: {
                 removeComments: false,
                 collapseWhitespace: true
