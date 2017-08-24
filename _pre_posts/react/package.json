@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server --devtool=cheap-module-eval-source-map"
   },
   "author": "",
   "license": "ISC",

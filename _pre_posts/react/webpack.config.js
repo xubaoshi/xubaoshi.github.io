@@ -1,4 +1,6 @@
-const { resolve } = require('path')
+const {
+    resolve
+} = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 module.exports = {
@@ -6,7 +8,7 @@ module.exports = {
         'react-hot-loader/patch',
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
-        './render.jsx'
+        './getDefaultProps.jsx'
     ],
     output: {
         filename: 'bundle.js',
@@ -24,15 +26,13 @@ module.exports = {
         publicPath: '/'
     },
     module: {
-        rules: [
-            {
-                test: /\.js|jsx$/,
-                use: [
-                    'babel-loader'
-                ],
-                exclude: /node_modules/
-            }
-        ]
+        rules: [{
+            test: /\.js|jsx$/,
+            use: {
+                loader: 'babel-loader?cacheDirectory',
+            },
+            exclude: /node_modules/
+        }]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

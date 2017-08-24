@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var createReactClass = require('create-react-class');
 
-var container = React.createClass({
+var Container = createReactClass({
     render: function () {
         return (
             <div>
@@ -11,4 +11,6 @@ var container = React.createClass({
         );
     }
 });
+
+ReactDOM.render(<Container></Container>, document.getElementById('root'));
 
