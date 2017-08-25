@@ -20,7 +20,7 @@ var A = createReactClass({
 });
 
 // 1. basic
-// ReactDOM.render(<A></A>, document.getElementById('root'));
+ReactDOM.render(<A></A>, document.getElementById('root'));
 
 // 2.getDefaultProps只调用一次
 // var B = createReactClass({
@@ -39,6 +39,3 @@ var A = createReactClass({
 // 除了getDefaultProps方法以下方法也可以设置props
 // 3.1 组件挂载时设置组件属性，优先级高于getDefaultProps方法返回的对象属性
 // ReactDOM.render(<A name='tt' age='22'></A>, document.getElementById('root'));
-// 3.2 setProps 设置（一般不需要使用该方法,几乎不用）
-var instance = ReactDOM.render(<A></A>, document.getElementById('root'));
-instance.setProps({ name: 'dd' });
