@@ -542,6 +542,7 @@ render方法是唯一一个必须的方法。
     ReactDOM.render(<C></C>,document.getElementById('root'));
 ### componentWillUpdate(nextProps,nextState) ###
 在组件接收到了新的 props 或者 state 即将进行重新渲染前，componentWillUpdate(object nextProps, object nextState) 会被调用。有一点必须注意不要在该函数内调用this.setState方法。
+    
     var React = require('react');
     var ReactDOM = require('react-dom');
     var createReactClass = require('create-react-class');
@@ -589,19 +590,156 @@ render方法是唯一一个必须的方法。
 这个方法和 componentDidMount 类似，在组件重新被渲染之后，componentDidUpdate(object prevProps, object prevState) 会被调用。可以在这里访问并修改 DOM。
 ## 销毁期 ##
 ### componentWillUnmount() ###
-组件将要移除时调用的函数， 在componentDidMount 中添加的任务都需要再该方法中撤销，如创建的定时器或事件监听器
+### componentWillMount() ###
+ 组件将要移除时调用的函数， 在componentDidMount 中添加的任务都需要再该方法中撤销，如创建的定时器或事件监听器等。撤销后如果再次使用该组件那么该组件的生命周期从getInitialState => componentWillMount => render =>componentDidMount重新实例化。
 
+    // 下面代码由A组件切换至B组件后，A执行componentWillUnmount方法取消定时器timer
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var createReactClass = require('create-react-class');
 
-## 类组件的state及props ##
-## 类组件的this ##
-在es6中一个React组件是用一个class来表示的。
+    var timer;
+    var A = createReactClass({
+        render: function () {
+            return (
+                <h1>A</h1>
+            )
+        },
+        componentDidMount: function () {
+            timer = setInterval(function () {
+                console.log('this is A');
+            }, 2000);
+        },
+        componentWillUnmount: function () {
+            console.log('componentWillunmount for A');
+            clearInterval(timer);
+        }
+    });
 
-    // 通过继承React.Component来实现
+    var B = createReactClass({
+        render: function () {
+            return (
+                <h1>B</h1>
+            )
+        }
+    });
+
+    var C = createReactClass({
+        getInitialState: function () {
+            return {
+                type: 'A'
+            }
+        },
+        render: function () {
+            if (this.state.type == 'A') {
+                return (
+                    <div>
+                        <A></A>
+                        <button onClick={this.clickHandle}>change1</button>
+                    </div>
+
+                )
+            } else {
+                return (
+                    <div>
+                        <B></B>
+                        <button onClick={this.clickHandle}>change2</button>
+                    </div>
+
+                )
+            }
+        },
+        clickHandle: function () {
+            if (this.state.type == 'A') {
+                this.setState({ type: 'B' });
+            } else {
+                this.setState({ type: 'A' });
+            }
+
+        }
+    });
+    ReactDOM.render(<C></C>, document.getElementById('root'));
+
+##类组件##
+上述代码主要讲述的是使用es5语法实现react组件，但在react官方文档中推荐ES6类绑定，前面之所以使用es5语法主要是为了方便讲述每一个生命周期函数，下面是有关class组件的相关内容及需要注意的地方：
+
+在es6中一个React组件是用一个class来表示的，语法如下：
+
+    // 继承React.Component来实现
     class A extends React.Component {
         //...
     }
-与其相关的函数如下：
+
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+
+    class A extends React.Component {
+        render() {
+            return (
+                <h1>A</h1>
+            )
+        }
+    }
+    ReactDOM.render(<A></A>,document.getElementById('root'));
+
 ### constructor(props,context) ###
+ps:es6类组件内默认constructor方法，参数为props，如果声明组件时不添加constructor默认执行：
+
+    constructor(props){
+        super(props)
+    }
+
+如果声明组件是添加了constructor，那么一定要执行super(props)再执行后续方法，否则会报错。
+### 类组件的state及props ###
+使用es6类的方式声明React组件中state及props的声明较es5的语法有些区别如下：<br>
+#### state ####
+es5使用getInitialState方法返回初始state，但在es6类组件中需通过在constructor方法内使用this.state初始化state。
+
+    // es5 class组件
+    class B extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                name: 'hh'
+            }
+        }
+        render() {
+            return (
+                <h1>
+                    {this.state.name}
+                </h1>
+            )
+        }
+    }
+
+    var C = createReactClass({
+        getInitialState: function () {
+            return {
+                name: 'll'      
+            }
+        },
+        render:function(){
+            return (
+                <h2>{this.state.name}</h2>
+            )
+        }
+    })
+    class D extends React.Component{
+        render(){
+            return(
+                <div>
+                    <B></B>
+                    <C></C>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<D></D>, document.getElementById('root'));
+
+
+### 类组件的this ###
+
+
 
 
 

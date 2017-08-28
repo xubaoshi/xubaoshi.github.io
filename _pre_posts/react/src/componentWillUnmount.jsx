@@ -14,8 +14,9 @@ var A = createReactClass({
             console.log('this is A');
         }, 2000);
     },
-    componentWillUnMount:function(){
-        console.log('componentWillUnMount!');
+    componentWillUnmount: function () {
+        console.log('componentWillunmount for A');
+        clearInterval(timer);
     }
 });
 
@@ -28,31 +29,38 @@ var B = createReactClass({
 });
 
 var C = createReactClass({
-    getInitialState:function(){
+    getInitialState: function () {
         return {
-            type:'A'
+            type: 'A'
         }
     },
     render: function () {
-        var str = '';
-        if(this.state.type == 'A'){
-            str = <A></A>;
+        if (this.state.type == 'A') {
+            return (
+                <div>
+                    <A></A>
+                    <button onClick={this.clickHandle}>change1</button>
+                </div>
+
+            )
         } else {
-            str = <B></B>;
+            return (
+                <div>
+                    <B></B>
+                    <button onClick={this.clickHandle}>change2</button>
+                </div>
+
+            )
         }
-        return (
-            <div>
-                {str}
-                <button onClick={this.clickHandle}>change</button>
-            </div>
-        )
     },
-    clickHandle:function(){
-        this.setState({type:'B'});
-    },
-    componentWillUnMount:function(){
-        console.log('componentWillUnMount!');
+    clickHandle: function () {
+        if (this.state.type == 'A') {
+            this.setState({ type: 'B' });
+        } else {
+            this.setState({ type: 'A' });
+        }
+
     }
 });
 
-ReactDOM.render(<C></C>,document.getElementById('root'));
+ReactDOM.render(<C></C>, document.getElementById('root'));
