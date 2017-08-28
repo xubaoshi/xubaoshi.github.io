@@ -232,12 +232,368 @@ render方法是唯一一个必须的方法。
 
 ### componentDidMonut() ###
 该方法被调用时，已经渲染出真实的DOM，此时我们可以访问DOM对象，或请求ajax（此时最为合适）。
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var createReactClass = require('create-react-class');
+    var $ = require('jquery');
+
+    // 1. dom树生成
+    var A = createReactClass({
+        render:function(){
+            return (
+                <div className="js-wrap">
+                    Hello World!
+                </div>
+            )
+        },
+        componentDidMount:function(){
+            var $wrap = document.getElementsByClassName('js-wrap')[0];
+            console.log($wrap.textContent);
+        }
+    });
+
+    ReactDOM.render(<A></A>,document.getElementById('root'));
+
+    // 2.ajax
+    var B = createReactClass({
+        getInitialState:function(){
+            return {
+                list:[]
+            }
+        },
+        render:function(){
+            var str = this.state.list.map(function(topic){
+                return (
+                    <p key={topic.id + new Date().getTime()}>{obj.id}</p>
+                )
+            })
+            return (
+                <div>
+                    {str}
+                </div>
+            )
+        },
+        componentDidMount:function(){
+            let _this = this; 
+            let url = 'https://cnodejs.org/api/v1/topics?limit=30';
+            $.get(url,function(data){
+                _this.setState({list:data.data});
+            })
+        }
+    });
+    ReactDOM.render(<B></B>,document.getElementById('root'));
+
+    // 3.refs
+    // refs用处
+    // 1.可以用于触发焦点事件、文本选择及媒体播放等
+    // 2.触发动画
+    // 3.集成第三方库（涉及操作DOM的）
+    // 4.建议不要过度使用
+
+    // 3.1 basic
+    var C = createReactClass({
+        render:function(){
+            return (
+                <input ref="textInput" />
+            )
+        },
+        componentDidMount:function(){
+            this.refs.textInput.focus();
+        }
+    });
+    // ReactDOM.render(<C></C>,document.getElementById('root'));
+
+    // 3.2 别名
+    var D = createReactClass({
+        render:function(){
+            return (
+                <input ref={(input)=>{this.textInput = input}} />
+            )
+        },
+        componentDidMount:function(){
+            this.textInput.focus();
+        }
+    });
+    // ReactDOM.render(<D></D>,document.getElementById('root'));
+
+    // 3.3 refs 无状态组件
+    // 如果组件之间ref，ref则表示对应组件的实例  
+    // 无状态组件 无法使用refs，因为它没有实例
+    // 含有生命周期的组件
+    var E = createReactClass({
+        render:function(){
+            return (
+                <input ref={input=>{this.textInput=input}} />
+            )
+        }
+    });
+
+    var F = function(){
+        return (
+            <input  ref={input=>{this.textInput=input}} />
+        )
+    };
+
+    var G = createReactClass({
+        render:function(){
+            return (
+                <div>
+                    <E ref={(input) => {this.E = input}} value="E"></E>
+                    <F ref={(input) => {this.F = input}} value="F"></F>
+                </div>
+            )
+        },
+        componentDidMount:function(){
+            // 下述代码是推荐的 这样导致了G组件与子组件的强耦合。
+            this.E.textInput.focus();
+            console.log(this.E);
+            console.log(this.F);
+        }
+    });
+    // ReactDOM.render(<G></G>,document.getElementById('root'));
+
+    // 3.4 通过props暴露DOM给父组件
+    var H = createReactClass({
+        render:function(){
+            return (
+                <input  ref={this.props.inputRef} />
+            )
+        }
+    });
+    var I = function(props){
+        return (
+            <input  ref={props.inputRef} />
+        )
+    };
+    var J = createReactClass({
+        render:function(){
+            return (
+                <div>
+                    <H inputRef={(input) => {this.textInputH = input}}></H>
+                    <I inputRef={(input) => {this.textInputI = input}}></I>
+                </div>
+            )
+        },
+        componentDidMount:function(){
+            this.textInputH.focus();
+            this.textInputI.focus();
+        }
+    });
+    ReactDOM.render(<J></J>,document.getElementById('root'));
 
 ## 存在期 ##
+### componentWillRecevieProps(nextProps) ###
+组件的 props 属性可以通过父组件来更改，如果依赖于父组件的props被修改，componentWillReceiveProps 将被调用，接下来依次调用shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate。
+
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var createReactClass = require('create-react-class');
+
+    var A = createReactClass({
+        getInitialState:function(){
+            return {
+                age:20
+            }
+        },
+        render: function () {
+            return (
+                <div>
+                    <h2>{this.props.name}</h2>
+                    <h3>{this.state.age}</h3>
+                </div>
+            )
+        },
+        componentWillReceiveProps: function (nextProps) {
+            console.log(this.state);
+            console.log(this.props);
+            console.log('nextProps:');
+            console.log(nextProps);
+            this.setState({age:30});
+        }
+    });
+
+    var B = createReactClass({
+        getInitialState:function(){
+            return {
+                name:'hh'
+            }
+        },
+        render:function(){
+            return (
+                <div>
+                    <A name={this.state.name}></A>
+                    <button onClick={this.clickHandle}>click</button>
+                </div>
+            )
+        },
+        clickHandle:function(){
+            this.setState({name:'ll'});
+        }
+    });
+    ReactDOM.render(<B></B>,document.getElementById('root'));
+
+### shouldComponentUpdate(nextProps,nextState) ###
+当实例化后组件的props、state发生变化时将调用以下方法：shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate。<br/>
+当组件的props、state发生改变时该方法执行，该方法传入两个参数nextProps(变更后的props)及nextState(变更后的state)，按照规则（视业务规则而定）返回true or false，决定组件是否需要重新渲染。。如果返回false,则 componentWillUpdate、render、componentDidUpdate将不会执行。 后期做性能优化时，shouldComponentUpdate是着手点。
+
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var createReactClass = require('create-react-class');
+
+    // 1.return false 
+    // name修改后不重新渲染
+    var A = createReactClass({
+        getInitialState: function () {
+            return {
+                name:'hh'
+            }
+        },
+        render: function () {
+            return (    
+                <div>
+                    <h2>{this.state.name}</h2>
+                    <button onClick={this.clickHandle}>change</button>
+                </div>
+            )
+        },
+        shouldComponentUpdate: function (nextProps, nextState) {
+            console.log('shouldComponentUpdate!');
+            return false;
+        },
+        componentWillUpdate:function(nextProps, nextState){
+            console.log('this.props:');
+            console.log(this.props);
+            console.log('this.state:');
+            console.log(this.state);
+            console.log('nextProps:');
+            console.log(nextProps);
+            console.log('nextState:');
+            console.log(nextState);
+        },
+        clickHandle: function () {
+            this.setState({name:'ll'});
+        }
+    });
+    ReactDOM.render(<A></A>,document.getElementById('root'));
+
+    // 2.props
+    // 只有当age发生变化 shouldComponentUpdate才会返回true
+    // 修改父组件的age componentWillReceiveProps
+    var B = createReactClass({
+        getInitialState: function () {
+            return {
+                name:'hh'
+            }
+        },
+        render: function () {
+            return (    
+                <div>
+                    <h2>{this.state.name}</h2>
+                    <h3>{this.props.age}</h3>
+                    <button onClick={this.clickHandle}>changeName</button>
+                </div>
+            )
+        },
+        componentWillReceiveProps:function(nextProps, nextState){
+            console.log('componentWillReceiveProps!');
+            this.setState({name:'tt'});
+        },
+        shouldComponentUpdate: function (nextProps, nextState) {
+            console.log('this.props:');
+            console.log(this.props);
+            console.log('this.state:');
+            console.log(this.state);
+            console.log('nextProps:');
+            console.log(nextProps);
+            console.log('nextState:');
+            console.log(nextState);
+            if(nextProps.age != this.props.age){
+                console.log('shouldComponentUpdate return  true');
+                return true;
+            } else {
+                console.log('shouldComponentUpdate return  false');
+                return false;
+            }
+        },
+        clickHandle: function () {
+            this.setState({name:'ll'});
+        }
+    });
+
+    var C = createReactClass({
+        getInitialState: function () {
+            return {
+                age: 20
+            }
+        },
+        render:function(){
+            return (
+                <div>
+                    <B age={this.state.age}></B>
+                    <button onClick={this.clickHandle}>changeAge</button>
+                </div>
+            )
+        },
+        clickHandle: function () {
+            this.setState({age:30});
+        }
+    });
+
+    ReactDOM.render(<C></C>,document.getElementById('root'));
+### componentWillUpdate(nextProps,nextState) ###
+在组件接收到了新的 props 或者 state 即将进行重新渲染前，componentWillUpdate(object nextProps, object nextState) 会被调用。有一点必须注意不要在该函数内调用this.setState方法。
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var createReactClass = require('create-react-class');
+
+    var A = createReactClass({
+        getInitialState: function () {
+            return {
+                name:'hh'
+            }
+        },
+        render: function () {
+            return (    
+                <div>
+                    <h2>{this.state.name}</h2>
+                    <button onClick={this.clickHandle}>change</button>
+                </div>
+            )
+        },
+        shouldComponentUpdate: function (nextProps, nextState) {
+            var num = Math.random() ;
+            if(Math.random() > 0.5){
+                console.log(true + '  shouldComponentUpdate: ' + num);
+                return true;
+            }else{
+                console.log(false + '  shouldComponentUpdate: ' + num);
+                return false;
+            }
+            // 如果为true 会一直循环走生命周期函数
+            // return true;
+        },
+        componentWillUpdate:function(nextProps, nextState){
+            this.setState({name:'ttt'});
+            console.log('this.state:');
+            console.log(this.state);
+            console.log('nextState:');
+            console.log(nextState);
+        },
+        clickHandle: function () {
+            this.setState({name:'ll'});
+        }
+    });
+    ReactDOM.render(<A></A>,document.getElementById('root'));
+
+### componentDidUpdate() ###
+这个方法和 componentDidMount 类似，在组件重新被渲染之后，componentDidUpdate(object prevProps, object prevState) 会被调用。可以在这里访问并修改 DOM。
 ## 销毁期 ##
+### componentWillUnmount() ###
+组件将要移除时调用的函数， 在componentDidMount 中添加的任务都需要再该方法中撤销，如创建的定时器或事件监听器
 
 
-## es6 类（class）组件生命周期 ##
+## 类组件的state及props ##
+## 类组件的this ##
 在es6中一个React组件是用一个class来表示的。
 
     // 通过继承React.Component来实现
@@ -248,12 +604,9 @@ render方法是唯一一个必须的方法。
 ### constructor(props,context) ###
 
 
-### componentWillRecevieProps(nextProps) ###
-### shouldComponentUpdate(nextProps,nextState) ###
-### componentWillUpdate(nextProps,nextState) ###
-### componentDidUpdate() ###
 
-### componentWillUnmount() ###
+
+
 
 
 
