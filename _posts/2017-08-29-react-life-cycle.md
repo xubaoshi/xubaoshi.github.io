@@ -232,6 +232,7 @@ render方法是唯一一个必须的方法。
 
 ### componentDidMonut() ###
 该方法被调用时，已经渲染出真实的DOM，此时我们可以访问DOM对象，或请求ajax（此时最为合适）。
+
     var React = require('react');
     var ReactDOM = require('react-dom');
     var createReactClass = require('create-react-class');
@@ -540,7 +541,9 @@ render方法是唯一一个必须的方法。
     });
 
     ReactDOM.render(<C></C>,document.getElementById('root'));
+
 ### componentWillUpdate(nextProps,nextState) ###
+
 在组件接收到了新的 props 或者 state 即将进行重新渲染前，componentWillUpdate(object nextProps, object nextState) 会被调用。有一点必须注意不要在该函数内调用this.setState方法。
     
     var React = require('react');
