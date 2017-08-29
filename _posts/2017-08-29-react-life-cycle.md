@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "2017-08-19-react生命周"
-date:       "2017-08-19"
+title:      "2017-08-29-react生命周"
+date:       "2017-08-29"
 author:     "XuBaoshi"
 header-img: "img/post-bg-08.jpg"
 ---
@@ -590,8 +590,7 @@ render方法是唯一一个必须的方法。
 这个方法和 componentDidMount 类似，在组件重新被渲染之后，componentDidUpdate(object prevProps, object prevState) 会被调用。可以在这里访问并修改 DOM。
 ## 销毁期 ##
 ### componentWillUnmount() ###
-### componentWillMount() ###
- 组件将要移除时调用的函数， 在componentDidMount 中添加的任务都需要再该方法中撤销，如创建的定时器或事件监听器等。撤销后如果再次使用该组件那么该组件的生命周期从getInitialState => componentWillMount => render =>componentDidMount重新实例化。
+ 组件将要移除时调用的函数， 在componentDidMount 中添加的任务都需要在该方法中撤销，如创建的定时器或事件监听器等。撤销后如果再次使用该组件那么该组件的生命周期从getInitialState => componentWillMount => render =>componentDidMount重新实例化。
 
     // 下面代码由A组件切换至B组件后，A执行componentWillUnmount方法取消定时器timer
     var React = require('react');
@@ -660,7 +659,7 @@ render方法是唯一一个必须的方法。
     });
     ReactDOM.render(<C></C>, document.getElementById('root'));
 
-##类组件##
+## 类组件 ##
 上述代码主要讲述的是使用es5语法实现react组件，但在react官方文档中推荐ES6类绑定，前面之所以使用es5语法主要是为了方便讲述每一个生命周期函数，下面是有关class组件的相关内容及需要注意的地方：
 
 在es6中一个React组件是用一个class来表示的，语法如下：
@@ -689,13 +688,14 @@ ps:es6类组件内默认constructor方法，参数为props，如果声明组件�
         super(props)
     }
 
-如果声明组件是添加了constructor，那么一定要执行super(props)再执行后续方法，否则会报错。
+如果声明组件是添加了constructor，子类必须在constructor方法中调用super方法，否则新建实例时会报错。
+
 ### 类组件的state及props ###
 使用es6类的方式声明React组件中state及props的声明较es5的语法有些区别如下：<br>
 #### state ####
 es5使用getInitialState方法返回初始state，但在es6类组件中需通过在constructor方法内使用this.state初始化state。
 
-    // es5 class组件
+    // class组件
     class B extends React.Component {
         constructor(props) {
             super(props)
@@ -712,6 +712,7 @@ es5使用getInitialState方法返回初始state，但在es6类组件中需通过
         }
     }
 
+    // es5 组件
     var C = createReactClass({
         getInitialState: function () {
             return {
@@ -736,8 +737,164 @@ es5使用getInitialState方法返回初始state，但在es6类组件中需通过
     }
     ReactDOM.render(<D></D>, document.getElementById('root'));
 
+#### props ####
+es5使用getDefaultProps方法返回初始props,es6的类组件初始化默认props略有不同。
+
+    // 1 在组件内部的使用static
+    static defaultProps = {
+        name:　...
+    }
+
+    // 2 在组件外部
+    Hello.defaultProps = {
+        name: ...
+    }
+
+在组件内的写法需要注意的是static是es7的写法需要添加babel-preset-stage-x。
+
+    // 外部
+    class L extends React.Component{
+        render(){
+            return (
+                <h1>{this.props.name}</h1>
+            )
+            
+        }
+    }
+    L.defaultProps = {
+        name:'hh'
+    }
+
+    class M extends React.Component{
+        static defaultProps = {
+            name:'ll'
+        }
+        render(){
+            return (
+                <h1>{this.props.name}</h1>
+            )
+            
+        }
+    }
+
+    class O extends React.Component{
+        render(){
+            return(
+                <div>
+                    <L></L>
+                    <M></M>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<O></O>, document.getElementById('root'));
+
 
 ### 类组件的this ###
+使用es5的React.createClass(v16会被废弃)或 'create-react-class',除了生命周期的钩子函数可以使用this(实例对象),自定义的方法同样可以使用this，是因为react本身帮我们绑定了this，才让我们不用手动去绑定this就能正确的使用。但es6的类组件除了生命周期函数，自定义的函数是不会进行this绑定的。需要手动绑定。
+
+    // 可以访问到this
+    var E = createReactClass({
+        render:function(){
+            return (
+                <button onClick={this.clickHandle}>es5</button>
+            )
+        },
+        clickHandle:function(){
+            console.log(this);
+        }
+    });
+
+    // 不可以访问到this为null
+    class F extends React.Component{
+        render(){
+            return (
+                <button onClick={this.clickHandle}>es6</button>
+            )
+            
+        }
+        clickHandle(){
+            console.log(this);
+        }
+    }
+
+    class G extends React.Component{
+        render(){
+            return(
+                <div>
+                    <E></E>
+                    <F></F>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<G></G>, document.getElementById('root'));
+
+es6的类组件绑定this可以在constructor函数内部绑定this，也可以使用箭头函数等(绑定方法还有，可参考链接[https://segmentfault.com/a/1190000006133727][https://segmentfault.com/a/1190000006133727])。如下：该文章推荐在constructor函数内部绑定this。
+
+    // 4.2.1 render() .bind(this)
+    // bad:每次render都要生成一个匿名函数
+    class H extends React.Component{
+        render(){
+            return (
+                <button onClick={this.clickHandle.bind(this)}>render-bind</button>
+            )
+            
+        }
+        clickHandle(){
+            console.log(this);
+        }
+    }
+
+    // 4.2.2 arrow function
+    // bad: 每次render都要生成一个箭头函数
+    class I extends React.Component{
+        render(){
+            return (
+                <button onClick={() => this.clickHandle()}>arrow-bind</button>
+            )
+            
+        }
+        clickHandle(){
+            console.log(this);
+        }
+    }
+
+    // 推荐使用这个
+    class J extends React.Component{
+        constructor(props){
+            super(props)
+            this.clickHandle = this.clickHandle.bind(this)
+        }
+        render(){
+            return (
+                <button onClick={this.clickHandle}>constructor-bind</button>
+            )
+            
+        }
+        clickHandle(){
+            console.log(this);
+        }
+    }
+
+    class K extends React.Component{
+        render(){
+            return(
+                <div>
+                    <H></H>
+                    <I></I>
+                    <J></J>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<K></K>, document.getElementById('root'));
+
+
+
 
 
 
