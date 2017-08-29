@@ -3,7 +3,7 @@ layout:     post
 title:      "2017-08-29-react生命周期"
 date:       "2017-08-29"
 author:     "XuBaoshi"
-header-img: "img/react.jpg"
+header-img: "img/node-module.jpg"
 ---
 # react生命周期 #
 所谓的生命周期，就是一个对象从开始生成到最后消亡所经历的状态。<br/>
