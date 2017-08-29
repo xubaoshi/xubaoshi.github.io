@@ -835,7 +835,7 @@ es5使用getDefaultProps方法返回初始props,es6的类组件初始化默认pr
 
     ReactDOM.render(<G></G>, document.getElementById('root'));
 
-es6的类组件绑定this可以在constructor函数内部绑定this，也可以使用箭头函数等(绑定方法还有，可参考链接[https://segmentfault.com/a/1190000006133727][https://segmentfault.com/a/1190000006133727])。如下：该文章推荐在constructor函数内部绑定this。
+es6的类组件绑定this可以在constructor函数内部绑定this，也可以使用箭头函数等。参考链接  [https://segmentfault.com/a/1190000006133727][https://segmentfault.com/a/1190000006133727]。如下：该文章推荐在constructor函数内部绑定this。
 
     // 4.2.1 render() .bind(this)
     // bad:每次render都要生成一个匿名函数
