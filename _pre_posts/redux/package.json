@@ -1,0 +1,26 @@
+{
+  "name": "redux-middleware",
+  "version": "1.0.0",
+  "description": "redux middleware",
+  "main": "webpack.config.js",
+  "scripts": {
+    "dev": "webpack-dev-server --devtool=cheap-module-eval-source-map"
+  },
+  "keywords": [
+    "redux",
+    "middleware"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  }
+}
