@@ -82,6 +82,61 @@ class MessageList extends React.Component {
     }
 }
 
+/**
+ * 非react-redux
+ * 
+ */
+class MessageListWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: store.getState().messages
+        }
+    }
+    render() {
+        return (
+            <MessageList messages={this.state.messages}
+                getMessages={this.getMessages}
+                addMessage={this.addMessage}
+                deleteMessage={this.deleteMessage}></MessageList>
+        )
+
+    }
+    componentDidMount() {
+        store.subscribe(() => {
+            this.setState(store.getState())
+        })
+    }
+    getMessages() {
+        store.dispatch(getMessageListAction());
+    }
+    addMessage() {
+        store.dispatch(addMessageAction(new Date().getTime()));
+
+    }
+    deleteMessage() {
+        store.dispatch(deleteMessageAction());
+    }
+}
+
+
+// App
+class App extends React.Component {
+    render() {
+        return (
+            <div>
+                <MessageListWrapper></MessageListWrapper>
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <App></App>,
+    document.getElementById('root')
+)
+
+
 // const mapStateToProps = (state, ownProps) => {
 //     return {
 //         messages: state.messages
@@ -103,47 +158,6 @@ class MessageList extends React.Component {
 // }
 // const MessageListWrapper = connect(mapStateToProps, mapDispacthToProps)(MessageList);
 
-class MessageListWrapper extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            messages: store.getState().messages
-        }
-    }
-    render() {
-        return (
-            <MessageList messages={this.state.messages}
-                getMessages={this.getMessages}
-                addMessage={this.addMessage}
-                deleteMessage={this.deleteMessage}></MessageList>
-        )
-
-    }
-    getMessages() {
-        store.dispatch(getMessageListAction());
-    }
-    addMessage() {
-        store.dispatch(addMessageAction(new Date().getTime()));
-    }
-    deleteMessage() {
-        store.dispatch(deleteMessageAction());
-    }
-}
-
-
-
-
-// App
-class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <MessageListWrapper></MessageListWrapper>
-            </div>
-        )
-    }
-}
-
 // ReactDOM.render(
 //     <Provider store={store}>
 //         <App></App>
@@ -151,9 +165,6 @@ class App extends React.Component {
 //     document.getElementById('root')
 // )
 
-ReactDOM.render(
-    <App></App>,
-    document.getElementById('root')
-)
+
 
 
