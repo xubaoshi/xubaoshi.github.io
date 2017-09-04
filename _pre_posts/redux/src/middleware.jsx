@@ -59,10 +59,10 @@ class MessageList extends React.Component {
     render() {
         const { messages } = this.props;
         const str = messages.map(obj =>
-             <p key={obj.id}>
-                <strong>id:</strong><span style={{'marginRight':'50px'}}>{obj.id}</span>
+            <p key={obj.id}>
+                <strong>id:</strong><span style={{ 'marginRight': '50px' }}>{obj.id}</span>
                 <strong>name:</strong><span>{obj.name}</span>
-             </p>
+            </p>
         );
         return (
             <div>
@@ -82,26 +82,56 @@ class MessageList extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        messages: state.messages
+// const mapStateToProps = (state, ownProps) => {
+//     return {
+//         messages: state.messages
+//     }
+// }
+
+// const mapDispacthToProps = dispatch => {
+//     return {
+//         getMessages() {
+//             dispatch(getMessageListAction());
+//         },
+//         addMessage() {
+//             dispatch(addMessageAction(new Date().getTime()));
+//         },
+//         deleteMessage() {
+//             dispatch(deleteMessageAction());
+//         }
+//     }
+// }
+// const MessageListWrapper = connect(mapStateToProps, mapDispacthToProps)(MessageList);
+
+class MessageListWrapper extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            messages: store.getState().messages
+        }
+    }
+    render() {
+        return (
+            <MessageList messages={this.state.messages}
+                getMessages={this.getMessages}
+                addMessage={this.addMessage}
+                deleteMessage={this.deleteMessage}></MessageList>
+        )
+
+    }
+    getMessages() {
+        store.dispatch(getMessageListAction());
+    }
+    addMessage() {
+        store.dispatch(addMessageAction(new Date().getTime()));
+    }
+    deleteMessage() {
+        store.dispatch(deleteMessageAction());
     }
 }
 
-const mapDispacthToProps = dispatch => {
-    return {
-        getMessages() {
-            store.dispatch(getMessageListAction());
-        },
-        addMessage() {
-            store.dispatch(addMessageAction(new Date().getTime()));
-        },
-        deleteMessage() {
-            store.dispatch(deleteMessageAction());
-        }
-    }
-}
-const MessageListWrapper = connect(mapStateToProps, mapDispacthToProps)(MessageList);
+
+
 
 // App
 class App extends React.Component {
@@ -114,10 +144,15 @@ class App extends React.Component {
     }
 }
 
+// ReactDOM.render(
+//     <Provider store={store}>
+//         <App></App>
+//     </Provider>,
+//     document.getElementById('root')
+// )
+
 ReactDOM.render(
-    <Provider store={store}>
-        <App></App>
-    </Provider>,
+    <App></App>,
     document.getElementById('root')
 )
 
