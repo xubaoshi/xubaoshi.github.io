@@ -24,7 +24,7 @@ const messagesReducer = (state = [{ id: time, name: `name${time}` }], action) =>
 const reducer = combineReducers({
     messages: messagesReducer
 });
-const store = createStore(reducer);
+let store = createStore(reducer);
 
 // actions
 const addMessageAction = (addTime) => {
@@ -192,31 +192,132 @@ class MessageList extends React.Component {
 //     }
 // }
 
-// 隐藏 dispatch
-const logger1 = function (store) {
-    let next = store.dispatch;
-    return function dispatchAndLog(action) {
-        console.log('dispatching logger1', action);
-        next(action);
-        console.log('next state logger1', store.getState());
-    }
-}
-const logger2 = function (store) {
-    let next = store.dispatch;
-    return function dispatchAndLog(action) {
-        console.log('dispatching logger2', action);
-        next(action);
-        console.log('next state logger2', store.getState());
-    }
-}
+// 隐藏 dispatch(多个中间件时)
+// 隐藏 dispatch 方式1
+// const logger1 = function (store) {
+//     let next = store.dispatch;
+//     store.dispatch = function dispatchAndLog1(action) {
+//         console.log('dispatching logger1', action);
+//         next(action);
+//         console.log('next state logger1', store.getState());
+//     }
+// }
+// const logger2 = function (store) {
+//     let next = store.dispatch;
+//     store.dispatch = function dispatchAndLog2(action) {
+//         console.log('dispatching logger2', action);
+//         next(action);
+//         console.log('next state logger2', store.getState());
+//     }
+// }
+// logger1(store);
+// logger2(store);
 
-const applyMiddlewareByMonkeypatching = (store, middlewares) => {
+// 隐藏 dispatch 方式2
+// const logger1 = function (store) {
+//     let next = store.dispatch;
+//     return function dispatchAndLog1(action) {
+//         console.log('dispatching logger1', action);
+//         next(action);
+//         console.log('next state logger1', store.getState());
+//     }
+// }
+// const logger2 = function (store) {
+//     let next = store.dispatch;
+//     return function dispatchAndLog2(action) {
+//         console.log('dispatching logger2', action);
+//         next(action);
+//         console.log('next state logger2', store.getState());
+//     }
+// }
+// const applyMiddlewareByMonkeypatching = (store, middlewares) => {
+//     middlewares = middlewares.slice();
+//     middlewares.reverse();
+//     middlewares.forEach((middleware) => {
+//         store.dispatch = middleware(store);
+//     });
+// }
+// applyMiddlewareByMonkeypatching(store,[logger2,logger1]);
+
+// next 作为参数传递
+// const logger1 = function (store, next) {
+//     return function dispatchAndLog1(action) {
+//         console.log('dispatching logger1', action);
+//         next(action);
+//         console.log('next state logger1', store.getState());
+//     }
+// }
+// const logger2 = function (store, next) {
+//     return function dispatchAndLog2(action) {
+//         console.log('dispatching logger2', action);
+//         next(action);
+//         console.log('next state logger2', store.getState());
+//     }
+// }
+// let dispatch = store.dispatch;
+// dispatch = logger1(store, dispatch);
+// dispatch = logger2(store, dispatch);
+// store = Object.assign({}, store, { dispatch });
+
+// 修改为applyMiddleware
+// function applyMiddleware(originStore, middlewares) {
+//     let dispatch = originStore.dispatch;
+//     middlewares = middlewares.slice();
+//     middlewares.reverse();
+//     middlewares.forEach(middleware => {
+//         dispatch = middleware(originStore, dispatch);
+//     })
+//     store = Object.assign({}, originStore, { dispatch });
+// }
+// applyMiddleware(store, [logger2, logger1]);
+
+
+// js柯里化
+// const logger1 = function (store) {
+//     return function (next) {
+//         return function dispatchAndLog1(action) {
+//             console.log('dispatching logger1', action);
+//             next(action);
+//             console.log('next state logger1', store.getState());
+//         }
+//     }
+// }
+// const logger2 = function (store) {
+//     return function (next) {
+//         return function dispatchAndLog2(action) {
+//             console.log('dispatching logger2', action);
+//             next(action);
+//             console.log('next state logger2', store.getState());
+//         }
+//     }
+// }
+
+// es6 箭头函数改写
+// const logger1 = (store) => (next) => (action) => {
+//     console.log('dispatching logger1', action);
+//     next(action);
+//     console.log('next state logger1', store.getState());
+// }
+
+// const logger2 = (store) => (next) => (action) => {
+//      console.log('dispatching logger2', action);
+//      next(action);
+//      console.log('next state logger2', store.getState());
+// }
+
+
+function applyMiddleware(originStore, middlewares) {
+    let dispatch = originStore.dispatch;
     middlewares = middlewares.slice();
     middlewares.reverse();
-    middlewares.forEach((middleware) => {
-        store.dispatch = middleware(store);
-    });
+    middlewares.forEach(middleware => {
+        dispatch = middleware(originStore)(dispatch);
+    })
+    store = Object.assign({}, originStore, { dispatch });
 }
+
+applyMiddleware(store, [logger2, logger1]);
+
 
 
 class MessageListWrapper extends React.Component {

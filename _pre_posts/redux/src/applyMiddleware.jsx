@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect, Provider } from 'react-redux';
-import { createStore, combineReducers ,applyMiddleware} from 'redux';
-
+import { createStore, combineReducers,applyMiddleware } from 'redux';
 
 // constants
 const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
@@ -14,8 +12,6 @@ const DELETE_MESSAGE = 'DELETE_MESSAGE';
 let time = new Date().getTime();
 const messagesReducer = (state = [{ id: time, name: `name${time}` }], action) => {
     switch (action.type) {
-        case GET_MESSAGE_LIST:
-            return state;
         case ADD_MESSAGE:
             return [{ id: action.addTime, name: `name${action.addTime}` }, ...state];
         case DELETE_MESSAGE:
@@ -29,22 +25,23 @@ const reducer = combineReducers({
     messages: messagesReducer
 });
 
-
+// middleware
 const logger1 = (store) => (next) => (action) => {
     console.log('dispatching logger1', action);
     next(action);
     console.log('next state logger1', store.getState());
 }
 
-let createStoreWithMiddleware = applyMiddleware(logger1)(createStore);
+const logger2 = (store) => (next) => (action) => {
+     console.log('dispatching logger2', action);
+     next(action);
+     console.log('next state logger2', store.getState());
+}
+
+let createStoreWithMiddleware = applyMiddleware(logger2,logger1)(createStore);
 let store = createStoreWithMiddleware(reducer);
 
 // actions
-const getMessageListAction = () => {
-    return {
-        type: GET_MESSAGE_LIST
-    }
-}
 const addMessageAction = (addTime) => {
     return {
         type: ADD_MESSAGE,
@@ -91,34 +88,50 @@ class MessageList extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        messages: state.messages
+class MessageListWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: store.getState().messages
+        };
+        this.unSubscribeHandle = () => { };
+    }
+    render() {
+        return (
+            <MessageList messages={this.state.messages}
+                getMessages={this.getMessages}
+                addMessage={this.addMessage}
+                deleteMessage={this.deleteMessage}></MessageList>
+        )
+    }
+    componentDidMount() {
+        this.unSubscribeHandle = store.subscribe(() => {
+            this.setState(store.getState())
+        });
+    }
+    componentWillUnmount() {
+        this.unSubscribeHandle();
+    }
+    addMessage() {
+        store.dispatch(addMessageAction(new Date().getTime()));
+
+    }
+    deleteMessage() {
+        store.dispatch(deleteMessageAction());
     }
 }
 
-const mapDispacthToProps = dispatch => {
-    return {
-        getMessages() {
-            dispatch(getMessageListAction());
-        },
-        addMessage() {
-            dispatch(addMessageAction(new Date().getTime()));
-        },
-        deleteMessage() {
-            dispatch(deleteMessageAction());
-        }
+class App extends React.Component {
+    render() {
+        return (
+            <div>
+                <MessageListWrapper></MessageListWrapper>
+            </div>
+        )
     }
 }
-const MessageListWrapper = connect(mapStateToProps, mapDispacthToProps)(MessageList);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App></App>
-    </Provider>,
+    <App></App>,
     document.getElementById('root')
 )
-
-
-
-
