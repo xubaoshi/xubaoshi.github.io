@@ -112,6 +112,16 @@ const mapDispacthToProps = dispatch => {
 }
 const MessageListWrapper = connect(mapStateToProps, mapDispacthToProps)(MessageList);
 
+class App extends React.Component {
+    render() {
+        return (
+            <div>
+                <MessageListWrapper></MessageListWrapper>
+            </div>
+        )
+    }
+}
+
 ReactDOM.render(
     <Provider store={store}>
         <App></App>
