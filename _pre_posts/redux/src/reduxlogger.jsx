@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers,applyMiddleware } from 'redux';
+import logger from 'redux-logger'
 
 // constants
 const ADD_MESSAGE = 'ADD_MESSAGE';
@@ -24,20 +25,7 @@ const reducer = combineReducers({
     messages: messagesReducer
 });
 
-// middleware
-const logger1 = (store) => (next) => (action) => {
-    console.log('dispatching logger1', action);
-    next(action);
-    console.log('next state logger1', store.getState());
-}
-
-const logger2 = (store) => (next) => (action) => {
-     console.log('dispatching logger2', action);
-     next(action);
-     console.log('next state logger2', store.getState());
-}
-
-let createStoreWithMiddleware = applyMiddleware(logger2,logger1)(createStore);
+let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
 let store = createStoreWithMiddleware(reducer);
 
 // actions

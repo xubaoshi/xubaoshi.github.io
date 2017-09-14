@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
 
 // constants
-const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
 const ADD_MESSAGE = 'ADD_MESSAGE';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 
@@ -93,7 +92,7 @@ class MessageList extends React.Component {
 //     componentDidMount() {
 //         this.unSubscribeHandle = store.subscribe(() => {
 //             // 1.手动log state
-//             // console.log('next state',store.getState())
+//             console.log('next state',store.getState());
 //             this.setState(store.getState())
 //         });
 //     }
@@ -101,12 +100,11 @@ class MessageList extends React.Component {
 //         this.unSubscribeHandle();
 //     }
 //     addMessage() {
-//         // 1.console.log('dispatching',addMessageAction(new Date().getTime()));
+//         console.log('dispatching',addMessageAction(new Date().getTime()));
 //         store.dispatch(addMessageAction(new Date().getTime()));
-
 //     }
 //     deleteMessage() {
-//         // 2.console.log('dispatching',deleteMessageAction());
+//         console.log('dispatching',deleteMessageAction());
 //         store.dispatch(deleteMessageAction());
 //     }
 // }
@@ -159,38 +157,38 @@ class MessageList extends React.Component {
 //     originDispatch(action);
 //     console.log('next state', store.getState());
 // }
-// class MessageListWrapper extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             messages: store.getState().messages
-//         };
-//         this.unSubscribeHandle = () => { };
-//     }
-//     render() {
-//         return (
-//             <MessageList messages={this.state.messages}
-//                 getMessages={this.getMessages}
-//                 addMessage={this.addMessage}
-//                 deleteMessage={this.deleteMessage}></MessageList>
-//         )
+class MessageListWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: store.getState().messages
+        };
+        this.unSubscribeHandle = () => { };
+    }
+    render() {
+        return (
+            <MessageList messages={this.state.messages}
+                getMessages={this.getMessages}
+                addMessage={this.addMessage}
+                deleteMessage={this.deleteMessage}></MessageList>
+        )
 
-//     }
-//     componentDidMount() {
-//         this.unSubscribeHandle = store.subscribe(() => {
-//             this.setState(store.getState())
-//         });
-//     }
-//     componentWillUnmount() {
-//         this.unSubscribeHandle();
-//     }
-//     addMessage() {
-//         store.dispatch(addMessageAction(new Date().getTime()));
-//     }
-//     deleteMessage() {
-//         store.dispatch(deleteMessageAction());
-//     }
-// }
+    }
+    componentDidMount() {
+        this.unSubscribeHandle = store.subscribe(() => {
+            this.setState(store.getState())
+        });
+    }
+    componentWillUnmount() {
+        this.unSubscribeHandle();
+    }
+    addMessage() {
+        store.dispatch(addMessageAction(new Date().getTime()));
+    }
+    deleteMessage() {
+        store.dispatch(deleteMessageAction());
+    }
+}
 
 // 隐藏 dispatch(多个中间件时)
 // 隐藏 dispatch 方式1
@@ -293,17 +291,17 @@ class MessageList extends React.Component {
 // }
 
 // es6 箭头函数改写
-// const logger1 = (store) => (next) => (action) => {
-//     console.log('dispatching logger1', action);
-//     next(action);
-//     console.log('next state logger1', store.getState());
-// }
+const logger1 = (store) => (next) => (action) => {
+    console.log('dispatching logger1', action);
+    next(action);
+    console.log('next state logger1', store.getState());
+}
 
-// const logger2 = (store) => (next) => (action) => {
-//      console.log('dispatching logger2', action);
-//      next(action);
-//      console.log('next state logger2', store.getState());
-// }
+const logger2 = (store) => (next) => (action) => {
+     console.log('dispatching logger2', action);
+     next(action);
+     console.log('next state logger2', store.getState());
+}
 
 
 function applyMiddleware(originStore, middlewares) {
@@ -320,38 +318,38 @@ applyMiddleware(store, [logger2, logger1]);
 
 
 
-class MessageListWrapper extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            messages: store.getState().messages
-        };
-        this.unSubscribeHandle = () => { };
-    }
-    render() {
-        return (
-            <MessageList messages={this.state.messages}
-                getMessages={this.getMessages}
-                addMessage={this.addMessage}
-                deleteMessage={this.deleteMessage}></MessageList>
-        )
+// class MessageListWrapper extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             messages: store.getState().messages
+//         };
+//         this.unSubscribeHandle = () => { };
+//     }
+//     render() {
+//         return (
+//             <MessageList messages={this.state.messages}
+//                 getMessages={this.getMessages}
+//                 addMessage={this.addMessage}
+//                 deleteMessage={this.deleteMessage}></MessageList>
+//         )
 
-    }
-    componentDidMount() {
-        this.unSubscribeHandle = store.subscribe(() => {
-            this.setState(store.getState())
-        });
-    }
-    componentWillUnmount() {
-        this.unSubscribeHandle();
-    }
-    addMessage() {
-        store.dispatch(addMessageAction(new Date().getTime()));
-    }
-    deleteMessage() {
-        store.dispatch(deleteMessageAction());
-    }
-}
+//     }
+//     componentDidMount() {
+//         this.unSubscribeHandle = store.subscribe(() => {
+//             this.setState(store.getState())
+//         });
+//     }
+//     componentWillUnmount() {
+//         this.unSubscribeHandle();
+//     }
+//     addMessage() {
+//         store.dispatch(addMessageAction(new Date().getTime()));
+//     }
+//     deleteMessage() {
+//         store.dispatch(deleteMessageAction());
+//     }
+// }
 
 
 

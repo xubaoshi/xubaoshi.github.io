@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
 
 // constants
-const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
 const ADD_MESSAGE = 'ADD_MESSAGE';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 
@@ -84,7 +83,6 @@ class MessageListWrapper extends React.Component {
     render() {
         return (
             <MessageList messages={this.state.messages}
-                getMessages={this.getMessages}
                 addMessage={this.addMessage}
                 deleteMessage={this.deleteMessage}></MessageList>
         )

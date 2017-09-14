@@ -6,7 +6,9 @@
   "scripts": {
     "common": "webpack-dev-server --config webpack.common.config.js --devtool=cheap-module-eval-source-map",
     "logger": "webpack-dev-server --config webpack.logger.config.js --devtool=cheap-module-eval-source-map",
-    "middleware": "webpack-dev-server --config webpack.middleware.config.js --devtool=cheap-module-eval-source-map"
+    "middleware": "webpack-dev-server --config webpack.middleware.config.js --devtool=cheap-module-eval-source-map",
+    "reactredux": "webpack-dev-server --config webpack.reactredux.config.js --devtool=cheap-module-eval-source-map",
+    "reduxlogger": "webpack-dev-server --config webpack.reduxlogger.config.js --devtool=cheap-module-eval-source-map"
   },
   "keywords": [
     "redux",
@@ -30,6 +32,7 @@
     "html-webpack-plugin": "^2.30.1",
     "jquery": "^3.2.1",
     "react-hot-loader": "^3.0.0-beta.7",
+    "redux-logger": "^3.0.6",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   }
