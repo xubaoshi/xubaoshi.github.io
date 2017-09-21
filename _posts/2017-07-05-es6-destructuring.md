@@ -76,7 +76,7 @@ header-img: "img/destructuring.jpg"
     };
     let {type:nodeType,name:nodeName="bar"} = node
     console.log(nodeType);  // "Identifier"
-    console.log(nodeName);  // "foo"
+    console.log(nodeName);  // "bar"
 
 <h3>解构嵌套对象</h3>
 
