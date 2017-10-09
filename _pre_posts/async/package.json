@@ -4,7 +4,8 @@
   "description": "redux middleware",
   "main": "webpack.config.js",
   "scripts": {
-    "thunk": "webpack-dev-server --config webpack.thunk.config.js --devtool=cheap-module-eval-source-map"
+    "thunk": "webpack-dev-server --config webpack.thunk.config.js --devtool=cheap-module-eval-source-map",
+    "common": "webpack-dev-server --config webpack.common.config.js --devtool=cheap-module-eval-source-map"
   },
   "keywords": [
     "redux",
@@ -13,8 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",

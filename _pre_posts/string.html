@@ -8,24 +8,21 @@
 </head>
 
 <body>
-    <script src="../js/jquery.min.js"></script>
+    <button id="btn">点击</button>
     <script>
-        $(function () {
-            var data = [{
-                id: '201706',
-                name: '二零一七年六月'
-            }, {
-                id: '201707',
-                name: '二零一七年七月'
-            }];
-            var $body = $('body');
-            var template = '',result = '';
-            data.forEach(function(obj){
-              template +=  `<li>${obj.name}</li>`
-            })
-            result = `<ul>${template}</ul>`
-            $body.append($(result));
-        });
+        window.onload = function () {
+            var $btn = document.getElementById('btn');
+            $btn.addEventListener('click', function () {
+                console.log('click event 1');
+                $btn.addEventListener('click', function () {
+                    console.log('click event ' + new Date().getTime());
+                });
+            });
+            $btn.addEventListener('click', function () {
+                console.log('click event 2');
+            });
+
+        };
     </script>
 </body>
 

@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { connect, Provider } from 'react-redux';
-import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import $ from 'jquery'
 
@@ -28,7 +26,6 @@ const reducer = combineReducers({
     cnode: listReducer
 });
 
-// let createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
 let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
 let store = createStoreWithMiddleware(reducer);
 
@@ -49,24 +46,8 @@ const fectchSuccess = (data) => {
         data: data
     }
 }
-// const fetchNodeList = ({ tab }) => {
-//     return (dispatch, getState) => {
-//         dispatch(beginFectch());
-//         $.ajax({
-//             url: `https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`,
-//             success: function (result) {
-//                 if (result.success && result.data) {
-//                     dispatch(fectchSuccess(result.data));
-//                 } else {
-//                     dispatch(fectchFail());
-//                 }
-//             },
-//             error: function (jqXHR, textStatus, errorThrown) {
-//                 dispatch(fectchFail());
-//             }
-//         });
-//     }
-// }
+
+
 
 // component
 // UI 组件
@@ -113,35 +94,47 @@ class CnodeList extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        cnode: state.cnode
+class CnodeListWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = store.getState();
+        this.getNodeList = this.getNodeList.bind(this);
+        this.unSubscribeHandle = null;
     }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getNodeList(tab) {
-            // dispatch(fetchNodeList({ tab }))
-            dispatch(beginFectch());
-            $.ajax({
-                url: `https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`,
-                success: function (result) {
-                    if (result.success && result.data) {
-                        dispatch(fectchSuccess(result.data));
-                    } else {
-                        dispatch(fectchFail());
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    dispatch(fectchFail());
-                }
-            });
+    getNodeList(tab) {
+        store.dispatch(beginFectch());
+        if (tab === 'job') {
+            store.dispatch(fectchFail());
+            return;
         }
+        $.ajax({
+            url: `https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`,
+            success: function (result) {
+                if (result.success && result.data) {
+                    store.dispatch(fectchSuccess(result.data));
+                } else {
+                    store.dispatch(fectchFail());
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                store.dispatch(fectchFail());
+            }
+        });
+    }
+    componentDidMount() {
+        this.unSubscribeHandle = store.subscribe(() => {
+            this.setState(store.getState())
+        });
+    }
+    componentWillUnmount() {
+        this.unSubscribeHandle();
+    }
+    render() {
+        return (
+            <CnodeList getNodeList={this.getNodeList} cnode={this.state.cnode}></CnodeList>
+        )
     }
 }
-
-const CnodeListWrapper = connect(mapStateToProps, mapDispatchToProps)(CnodeList);
 
 class App extends React.Component {
     render() {
@@ -154,8 +147,6 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App></App>
-    </Provider>,
+    <App></App>,
     document.getElementById('root')
 )
