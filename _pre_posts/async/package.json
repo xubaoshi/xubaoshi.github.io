@@ -5,7 +5,9 @@
   "main": "webpack.config.js",
   "scripts": {
     "thunk": "webpack-dev-server --config webpack.thunk.config.js --devtool=cheap-module-eval-source-map",
-    "common": "webpack-dev-server --config webpack.common.config.js --devtool=cheap-module-eval-source-map"
+    "promise": "webpack-dev-server --config webpack.promise.config.js --devtool=cheap-module-eval-source-map",
+    "common": "webpack-dev-server --config webpack.common.config.js --devtool=cheap-module-eval-source-map",
+    "thunk_react_redux": "webpack-dev-server --config webpack.thunk.react.redux.config.js --devtool=cheap-module-eval-source-map"
   },
   "keywords": [
     "redux",
@@ -18,7 +20,9 @@
     "react-dom": "^15.6.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
     "redux-logger": "^3.0.6",
+    "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {

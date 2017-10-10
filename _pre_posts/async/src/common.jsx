@@ -69,7 +69,7 @@ class CnodeList extends React.Component {
                 str = cnode.data.map(obj =>
                     <li key={obj.id}>
                         <strong>id:</strong><span style={{ 'marginRight': '50px' }}>{obj.id}</span>
-                        <strong>author_id:</strong><span>{obj.author_id}</span>
+                        <strong>content:</strong><span>{obj.content.slice(100,250)}</span>
                     </li>
                 );
             } else {

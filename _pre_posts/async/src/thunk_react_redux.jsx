@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { connect, Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import $ from 'jquery'
@@ -89,7 +90,7 @@ class CnodeList extends React.Component {
                 str = cnode.data.map(obj =>
                     <li key={obj.id}>
                         <strong>id:</strong><span style={{ 'marginRight': '50px' }}>{obj.id}</span>
-                        <strong>content:</strong><span>{obj.content.slice(100,250)}</span>
+                        <strong>content:</strong><span>{obj.content.slice(100, 250)}</span>
                     </li>
                 );
             } else {
@@ -114,30 +115,19 @@ class CnodeList extends React.Component {
     }
 }
 
-class CnodeListWrapper extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = store.getState();
-        this.getNodeList = this.getNodeList.bind(this);
-        this.unSubscribeHandle = null;
-    }
-    getNodeList(tab) {
-        store.dispatch(fetchNodeList({tab}));
-    }
-    componentDidMount() {
-        this.unSubscribeHandle = store.subscribe(() => {
-            this.setState(store.getState())
-        });
-    }
-    componentWillUnmount() {
-        this.unSubscribeHandle();
-    }
-    render() {
-        return (
-            <CnodeList getNodeList={this.getNodeList} cnode={this.state.cnode}></CnodeList>
-        )
+const mapStateToProps = (state) => {
+    return {
+        cnode: state.cnode
     }
 }
+const mapDispatchToProps = dispatch => {
+    return {
+        getNodeList: (tab) => {
+            dispatch(fetchNodeList({ tab }))
+        }
+    }
+}
+const CnodeListWrapper = connect(mapStateToProps, mapDispatchToProps)(CnodeList);
 
 class App extends React.Component {
     render() {
@@ -150,6 +140,8 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-    <App></App>,
+    <Provider store={store}>
+        <App></App>
+    </Provider>,
     document.getElementById('root')
 )
