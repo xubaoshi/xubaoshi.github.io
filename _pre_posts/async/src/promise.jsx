@@ -9,22 +9,21 @@ import $ from 'jquery'
 
 // constants
 const FETCH_CNODE_LIST = 'FETCH_CNODE_LIST';
-const FETCH_CNODE_FAILURE = 'FETCH_CNODE_FAILURE';
-const FETCH_CNODE_SUCCESS = 'FETCH_CNODE_SUCCESS';
 
 // reduce
-const listReducer = (state = { isFetching: false, hasError: false, data: [] }, action) => {
+const listReducer = (state = { hasError: false, data: [] }, action) => {
     switch (action.type) {
         case FETCH_CNODE_LIST:
-            return Object.assign({}, state, { isFetching: true, hasError: false });
-        case FETCH_CNODE_FAILURE:
-            return Object.assign({}, state, { hasError: true, isFetching: false });
-        case FETCH_CNODE_SUCCESS:
-            return Object.assign({}, state, { data: action.payload, isFetching: false, hasError: false });
+            if (action.payload.error) {
+                return Object.assign({}, state, { hasError: true });
+            } else {
+                return Object.assign({}, state, { data: action.payload, hasError: false });
+            }
         default:
             return state
     }
 }
+
 const reducer = combineReducers({
     cnode: listReducer
 });
@@ -32,42 +31,29 @@ const reducer = combineReducers({
 let createStoreWithMiddleware = applyMiddleware(reduxPromise, logger)(createStore);
 let store = createStoreWithMiddleware(reducer);
 
-// actions
-const beginFectch = () => {
-    return {
-        type: FETCH_CNODE_LIST
-    }
-}
-const fectchFail = () => {
-    return {
-        type: FETCH_CNODE_FAILURE
-    }
-}
-const fectchSuccess = (data) => {
-    return {
-        type: FETCH_CNODE_SUCCESS,
-        data: data
-    }
-}
-// const fetchNodeList = (dispatch, { tab }) => new Promise(function () {
-//     dispatch(beginFectch());
-//     if (tab === 'job') {
-//         dispatch(fectchFail());
-//         return;
+// // 方式1 actions
+// const fectcList = (data) => {
+//     return {
+//         type: FETCH_CNODE_LIST,
+//         payload: data
 //     }
+// }
+// const fetchNodeList = ({ tab }) => new Promise(function (resolve, reject) {
 //     return $.get(`https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`).then(result => {
-//         dispatch(fectchSuccess(result.data));
+//         resolve(fectcList(result.data));
 //     });
 // });
 
-const fetchNodeList = (dispatch, { tab }) => {
-    dispatch(beginFectch());
-    if (tab === 'job') {
-        dispatch(fectchFail());
-        return;
-    }
-    dispatch(createAction(FETCH_CNODE_SUCCESS)($.get(`https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`).then(result => result.data)))
-}
+// 方式二
+const fetchNodeList = createAction(FETCH_CNODE_LIST, ({tab}) => {
+    return new Promise(function (resolve, reject) {
+        $.get(`https://cnodejs.org/api/v1/topics?tab=${tab}&limit=20`).then(function (result) {
+            resolve(result.data);
+        }, function () {
+            reject({ error: true })
+        });
+    })
+});
 
 
 // component
@@ -122,7 +108,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         getNodeList: (tab) => {
-            fetchNodeList(dispatch, { tab })
+            dispatch(fetchNodeList({ tab }));
         }
     }
 }
