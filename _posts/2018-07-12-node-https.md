@@ -75,4 +75,5 @@ server {
 
 保存后重启 nginx。
 
+
 ps: 域名成功访问的前提 node 服务是正常。
