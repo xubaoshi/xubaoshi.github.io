@@ -129,7 +129,7 @@ value             Number                单次累加上报量，默认 1
 
 ### setConfig() 修改配置项
 
-统计业务场景中某些事件发生的平均次数或平均值
+用于在 SDK 初始完成后重新修改部分配置项。
 
 ```javascript
 __bl.setConfig(next)
@@ -329,6 +329,7 @@ var util_r = util
       this.$a1 = [],
       this.hash = util_r.seq(),
       this.$a6(),
+      // 设置页面传递过来的信息
       this.setConfig(e),
       this.rip = util_r.getRandIP(),
       this.record = 999,
@@ -416,8 +417,8 @@ a.dftCon = {
   }
 }
 ```
-common.sender_11.js  o fetch 
-common.post_9.js  i XMLHttpRequest post
+common.sender_11.js o fetch  
+common.post_9.js  i XMLHttpRequest post  
 
 
 ### api 请求上报
@@ -461,6 +462,7 @@ export default function (t, n) {
             var e = n[u];
             n[c] = e,
               n[u] = function (t) {
+                // 使用原生 XMLHttpRequest 方法初始化 ,在此基础上再次封装，装饰者模式
                 var n = new e(t)
                   , i = a;
                 if (!i || !i.api || !n.addEventListener)
@@ -528,6 +530,8 @@ export default function (t, n) {
 }
 ```
 
+reporter_13 api()
+
 ``` javascript
 {
   api: function (e, t, n, base_a, i, s, c, u) {
@@ -556,7 +560,7 @@ export default function (t, n) {
 }
 ```
 
-### pv 上报
+### pv 上报 (uv 后台统计)
 
 handler_5.js   $ar
 
@@ -631,9 +635,6 @@ var util_r = util
   };
 ```
 
-
-``` javascript
-```
 handler_5.js   $ah
 
 ``` javascript
@@ -841,7 +842,20 @@ fmp_3.js
 
 #### 其他性能指标
 
-common.perf_8.js
+index.js
+
+``` javascript
+function r (e, t) {
+  var n = a[i] = new o(e);
+  n.$ak(t);
+  var r = n._conf;
+  return !1 !== r.autoSendPv && n.$ar(),
+    r && r.useFmp || n.$au(),
+    r && r.sendResource && n.$b0(),
+    a[s] = !0,
+    n
+}
+```
 
 handler_5.js   $au
 
@@ -860,17 +874,5 @@ handler_5.js   $au
 }
 ```
 
-index.js
 
-``` javascript
-function r (e, t) {
-  var n = a[i] = new o(e);
-  n.$ak(t);
-  var r = n._conf;
-  return !1 !== r.autoSendPv && n.$ar(),
-    r && r.useFmp || n.$au(),
-    r && r.sendResource && n.$b0(),
-    a[s] = !0,
-    n
-}
-```
+common.perf_8.js
