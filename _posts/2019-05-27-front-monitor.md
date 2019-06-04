@@ -11,7 +11,7 @@ header-img: 'img/node-module.jpg'
 ARMS 前端监控平台用于 Web 端体验数据监控，从页面打开速度（测速）、页面稳定性（JS Error）和外部服务调用成功率（API）这三个
 方面监测 Web 页面的健康度。
 
-[文档地址][https://help.aliyun.com/document_detail/58652.html?spm=a2c4g.11186623.6.601.6b427408NLzKtY]
+[文档地址](https://help.aliyun.com/document_detail/58652.html?spm=a2c4g.11186623.6.601.6b427408NLzKtY)
 
 ## sdk 初始化
 
