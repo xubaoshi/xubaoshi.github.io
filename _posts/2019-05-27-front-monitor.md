@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'arms前端监控源码分析'
+title: '阿里 arms 前端监控源码分析'
 date: '2019-05-27'
 author: 'XuBaoshi'
 header-img: 'img/node-module.jpg'
@@ -8,75 +8,16 @@ header-img: 'img/node-module.jpg'
 
 # 阿里 arms 前端监控（web 场景）源码分析
 
-ARMS 前端监控平台用于 Web 端体验数据监控，从页面打开速度（测速）、页面稳定性（JS Error）和外部服务调用成功率（API）这三个方面监测 Web 页面的健康度。
+ARMS 前端监控平台用于 Web 端体验数据监控，从页面打开速度（测速）、页面稳定性（JS Error）和外部服务调用成功率（API）这三个
+方面监测 Web 页面的健康度。
 
-## 功能说明
-
-### 页面访问速度
-
-#### 页面加载瀑布图
-
-DNS 查询  
-TCP 连接  
-请求响应  
-内容传输  
-DOM 解析  
-资源加载
-
-#### 关键性能指标
-
-首次渲染  
-首屏时间  
-首次可交互  
-DOM Ready  
-页面完全加载时间
-
-#### html performance
-
-performance 是 html5 的新特性之一，通过它页面的开发者们可以非常精确的统计到自己页面的表现情况。
-
-![https://images2015.cnblogs.com/blog/1025895/201705/1025895-20170515171943869-544403857.png](https://images2015.cnblogs.com/blog/1025895/201705/1025895-20170515171943869-544403857.png)
-
-[performance api 说明](https://www.cnblogs.com/bldxh/p/6857324.html)
-
-### API 请求监控
-
-API 的成功率  
-返回信息  
-接口的调用成功平均耗时  
-接口的调用失败平均耗时
-
-### 性能样本分布
-
-### 慢页面会话追踪
-
-### 地理分布和终端分布
-
-### JS 错误诊断及 JS 错误统计
-
-JS 错误率 = 指定时间内发生 JS 错误的 PV / 总 PV
-
-#### 错误关键信息
-
-上报时间  
-日志类型  
-页面地址  
-浏览器  
-设备  
-地域  
-Tag  
-UA(User Agent)  
-Param 参数  
-Message(信息）  
-Stack(错误栈信息)  
-File(错误文件)  
-Line/Col(错误位置）
+[文档地址][https://help.aliyun.com/document_detail/58652.html?spm=a2c4g.11186623.6.601.6b427408NLzKtY]
 
 ## sdk 初始化
 
 ### 以 CDN 方式接入
 
-![https://imgur.com/a/8YQrYr1](https://imgur.com/a/8YQrYr1)
+![/img/monitor/cdn.png](/img/monitor/cdn.png)  
 
 ### Npm 接入配置
 
@@ -202,7 +143,7 @@ next               Object                需要修改的配置项以及值
 
 ### setPage() 设置当前页面的 page name
 
-统计业务场景中某些事件发生的平均次数或平均值
+设置当前页面的 page name
 
 ```javascript
 __bl.setPage(next, sendPv)
@@ -746,84 +687,15 @@ handler_5.js   $as
 
 history 模式 （参看 hack_4.js ）
 
-### 页面加载性能数据上报
-
-#### 首屏渲染 
-
-biz.browser.clazz_2.js 
-
-``` javascript
-import util from './utils_14.js'
-import reporter from './reporter_13.js'
-import sender from '././common.sender_11.js'
-import post from './common.post_9.js'
-import handler from './handler_5.js'
-import fmp from './fmp_3.js'
-import hook from './hook_6.js'
-import hack from './hack_4.js'
-var util_r = util
-  , reporter_a = reporter
-  , sender_o = sender
-  , post_i = post
-  , util_r_win_s = util_r.win
-  , c = util_r_win_s.document
-  , u = /^(error|api|speed|sum|avg|percent|custom|msg|setPage|setConfig)$/
-  , f = function (e) {
-    var t = this;
-    return reporter_a.call(t, e),
-      // ...
-      t.$aj(1e4),
-      // ...
-  };
-
-// ...
-
-fmp(f, util_r_win_s, c)
-
-```
-
-fmp_3.js
-
-[MutationObserver](http://javascript.ruanyifeng.com/dom/mutationobserver.html)
-
-### 其他性能指标
-
-common.perf_8.js
-
-handler_5.js   $au
-
-``` javascript
-{
-  $au: function (e) {
-      var t = this;
-      t.$a2(function () {
-        //  common.perf_8.js
-        var n = o();
-        n && (n.page = t.$a7(!0),
-          e && (n = a.ext(n, e)),
-          t._lg("perf", n, t.getConfig("sample")))
-      })
-  }
-}
-```
-
-index.js
-
-``` javascript
-function r (e, t) {
-  var n = a[i] = new o(e);
-  n.$ak(t);
-  var r = n._conf;
-  return !1 !== r.autoSendPv && n.$ar(),
-    r && r.useFmp || n.$au(),
-    r && r.sendResource && n.$b0(),
-    a[s] = !0,
-    n
-}
-```
-
-
 ### 资源加载数据上报
+
+#### html performance
+
+performance 是 html5 的新特性之一，通过它页面的开发者们可以非常精确的统计到自己页面的表现情况。
+
+![/img/monitor/performance.png](/img/monitor/performance.png)  
+
+[performance api 说明](https://www.cnblogs.com/bldxh/p/6857324.html)
 
 index.js
 
@@ -924,5 +796,81 @@ handler_5.js  error
       return this.$ag && this.$ag("error", i),
         this._lg("error", i, 1)
   }
+}
+```
+
+### 页面加载性能数据上报
+
+#### 首屏渲染 
+
+biz.browser.clazz_2.js 
+
+``` javascript
+import util from './utils_14.js'
+import reporter from './reporter_13.js'
+import sender from '././common.sender_11.js'
+import post from './common.post_9.js'
+import handler from './handler_5.js'
+import fmp from './fmp_3.js'
+import hook from './hook_6.js'
+import hack from './hack_4.js'
+var util_r = util
+  , reporter_a = reporter
+  , sender_o = sender
+  , post_i = post
+  , util_r_win_s = util_r.win
+  , c = util_r_win_s.document
+  , u = /^(error|api|speed|sum|avg|percent|custom|msg|setPage|setConfig)$/
+  , f = function (e) {
+    var t = this;
+    return reporter_a.call(t, e),
+      // ...
+      t.$aj(1e4),
+      // ...
+  };
+
+// ...
+
+fmp(f, util_r_win_s, c)
+
+```
+
+fmp_3.js
+
+[MutationObserver](http://javascript.ruanyifeng.com/dom/mutationobserver.html)
+
+#### 其他性能指标
+
+common.perf_8.js
+
+handler_5.js   $au
+
+``` javascript
+{
+  $au: function (e) {
+      var t = this;
+      t.$a2(function () {
+        //  common.perf_8.js
+        var n = o();
+        n && (n.page = t.$a7(!0),
+          e && (n = a.ext(n, e)),
+          t._lg("perf", n, t.getConfig("sample")))
+      })
+  }
+}
+```
+
+index.js
+
+``` javascript
+function r (e, t) {
+  var n = a[i] = new o(e);
+  n.$ak(t);
+  var r = n._conf;
+  return !1 !== r.autoSendPv && n.$ar(),
+    r && r.useFmp || n.$au(),
+    r && r.sendResource && n.$b0(),
+    a[s] = !0,
+    n
 }
 ```
