@@ -158,6 +158,8 @@ sendPv             Boolean               是否上报 PV，默认会上报
 
 ## 源码分析
 
+[源码地址](https://github.com/xubaoshi/monitor-source-code/tree/master/lib/src)
+
 ### 初始化（CDN）
 
 ```html
