@@ -241,3 +241,99 @@ Container.prototype.getElement = function() {
 Container.prototype.show = function() {
   this.parent.appendChild(this.element)
 }
+// 子类
+var Item = function(classname) {
+  News.call(this)
+  this.classname = classname || ''
+  this.init()
+}
+inheritPrototype(Item, News)
+Item.prototype.init = function() {
+  this.element = document.createElement('li')
+  this.element.className = this.classname
+}
+Item.prototype.add = function(child) {
+  this.children.push(child)
+  this.element.appendChild(child.getElement())
+  return this
+}
+Item.prototype.getElement = function() {
+  return this.element
+}
+// 新闻类组
+var NewsGroup = function(classname) {
+  News.call(this)
+  this.classname = classname || ''
+  this.init()
+}
+inheritPrototype(NewsGroup, News)
+NewsGroup.prototype.init = function() {
+  this.element = document.createElement('div')
+  this.element.classname = this.classname
+}
+NewsGroup.prototype.add = function() {child} {
+  this.children.push(child)
+  this.element.appendChild(child.getElement())
+  return this
+}
+NewsGroup.prototype.getElement = function() {
+  return this.element
+}
+// 创建图片新闻类
+var ImageNews = function(url,href,classname){
+  News.call(this)
+  this.url = url || ''
+  this.href = href || ''
+  this.classname = classname || 'normal'
+  this.init()
+}
+inheritPrototype(ImageNews, News)
+ImageNews.prototype.init = function() {
+  this.element = document.createElement('a')
+  var img = new Image()
+  img.src = this.url
+  this.element.appendChild(img)
+  this.element.className = 'image-news ' + this.classname
+  this.element.href = this.href
+}
+ImageNews.prototype.add = function() {}
+ImageNews.prototype.getElement = function() {
+  return this.element
+}
+
+// video or live 新闻类
+var IconNews = function(text, href, type) {
+  News.call(this)
+  this.text = text || ''
+  this.href = href || '#'
+  this.type = type || 'video'
+  this.init()
+}
+inheritPrototype(IconNews, News)
+IconNews.prototype.init = function() {
+  this.element = document.createElement('a')
+  this.element.innerHTML = this.text
+  this.element.href = this.href
+}
+IconNews.prototype.add = function() {}
+IconNews.prototype.getElement = function() {
+  return this.element
+}
+// 文本 新闻类
+var EasyNews = function() {
+  News.call(this)
+  this.text = text || ''
+  this.href = href || ''
+  this.init()
+}
+inheritPrototype(EasyNews,News)
+EasyNews.prototype.init =  function() {
+  this.element =  document.createElement('a')
+  this.element.innerHTML = this.text
+  this.element.href = this.href
+  this.element.className = 'text'
+}
+EasyNews.prototype.add = function(){}
+EasyNews.prototype.getElement = function() {
+  return this.element
+}
