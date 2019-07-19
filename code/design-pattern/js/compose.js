@@ -337,3 +337,26 @@ EasyNews.prototype.add = function(){}
 EasyNews.prototype.getElement = function() {
   return this.element
 }
+
+// 使用
+
+var news1 = new Container('news', document.body);
+news1.add(
+  new Item('normal').add(
+    new IconNews('哈哈哈', '#', 'video')
+  )
+).add(
+  new Item('normal').add(
+    new IconNews('呵呵呵', '#', 'live')
+  )
+).add(
+  new Item('normal').add(
+    new NewsGroup('has-img').add(
+      new ImageNews('img/1.jpg', '#', 'small')
+    ).add(
+      new EasyNews('aaaa', '#')
+    ).add(
+      new EasyNews('五大雷人跑步机', '#')
+    )
+  )
+).show();
