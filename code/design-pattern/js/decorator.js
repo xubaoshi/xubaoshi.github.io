@@ -12,6 +12,8 @@
  * demo:
  * 1. juqery $.extend
  * 2. redux 中间件
+ * 
+ * http://c.biancheng.net/view/1366.html
  */
 
 // demo1
