@@ -5,24 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>design-pattern</title>
+    <style>
+      .content {
+        width: 800px;
+        margin: 0 auto;
+        font-size: 20px;
+      }
+      .content ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
   </head>
   <body>
-    <p style="text-align:center;font-size: 20px;margin-top: 60px;">
-      设计模式的应用基础是面向对象的程序设计方法。没有面向对象的理论，设计模式的实现就没有了基础。可能从方法论的角度说，设计模式是一种思想和具体的程序设计语言没有必然的联系，可软件最终还是要通过代码来实现。不同的语言体现了对面向对象理论的不同理解，也是理论不断发展的体现。
-      继承、封装和多态是面向对象理论的三大特点，而设计模式也正是充分利用了面向对象的特点。
-      设计模式是解决某个特定场景下对某种问题的解决方案。因此，当我们遇到合适的场景时，我们可能会条件反射一样自然而然想到符合这种场景的设计模式
-    </p>
-    <!-- http://www.woshipm.com/pd/779447.html -->
-    <p>
-      设计模式之六大原则
-      高内聚，低耦合
-      开闭原则（Open Close Principle）
-      里氏代换原则（Liskov Substitution Principle）
-      依赖倒转原则（Dependence Inversion Principle）
-      接口隔离原则（Interface Segregation Principle）
-      迪米特法则（最少知道原则）（Demeter Principle）
-      单一职责原则（ Single responsibility principle ）
-    </p>
-    <script src="./js/proxy.js"></script>
+    <div class="content">
+      <p style="text-align:center;margin-top: 60px;">
+        设计模式的应用基础是面向对象的程序设计方法。没有面向对象的理论，设计模式的实现就没有了基础。可能从方法论的角度说，设计模式是一种思想和具体的程序设计语言没有必然的联系，可软件最终还是要通过代码来实现。不同的语言体现了对面向对象理论的不同理解，也是理论不断发展的体现。
+        继承、封装和多态是面向对象理论的三大特点，而设计模式也正是充分利用了面向对象的特点。
+        设计模式是解决某个特定场景下对某种问题的解决方案。因此，当我们遇到合适的场景时，我们可能会条件反射一样自然而然想到符合这种场景的设计模式
+      </p>
+      <!-- http://www.woshipm.com/pd/779447.html -->
+      <h4>设计模式之六大原则(>高内聚，低耦合)</h4>
+      <ul>
+        <li>
+          开闭原则（Open Close
+          Principle）：软件模块应该对扩展开放，对修改关闭。目的：为了使程序的扩展性好，易于维护和升级。
+        </li>
+        <li>
+          里氏代换原则（Liskov Substitution
+          Principle）原则是继承复用的基石，软件单位的功能不受到影响时，基类才能真正被复用，而衍生类也能够在基类的基础上增加新的行为。目的：对实现抽象化的具体步骤的规范。
+        </li>
+        <li>
+          依赖倒转原则（Dependence Inversion
+          Principle）针对接口编程，而不是针对实现编程。目的：降低模块间的耦合。
+        </li>
+        <li>
+          接口隔离原则（Interface Segregation
+          Principle）使用多个隔离的接口，比使用单个接口要好。目的：提高程序设计灵活性。
+        </li>
+        <li>
+          迪米特法则（最少知道原则）（Demeter
+          Principle）一个实体应当尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立。降低类之间的耦合，减少对其他类的依赖
+        </li>
+        <li>
+          单一职责原则（ Single responsibility principle
+          ）一个类只负责一个功能领域中的相应职责。目的：类的复杂性降低，可读性提高，可维护性提高。
+        </li>
+      </ul>
+    </div>
+    <script src="./js/create/factory.js"></script>
   </body>
 </html>
