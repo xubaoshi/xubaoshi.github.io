@@ -1,6 +1,6 @@
 /**
  * 工厂模式
- *
+ * 创建对象涉及高复杂性，同时针对不同的环境生成不同的实例
  * 简单工厂模式: 使用一个类或者方法来生成一个实例。
  * 复杂工厂模式：使用子类来决定一个成员变量应该是哪个具体类的实例。
  */
@@ -51,8 +51,11 @@
       // 讓子類來完成這個工作
       var bicycle = this.createBicycle(model)
       return bicycle
-    }
+    },
     // 抽象方法必須子類實現後才能調用
+    createBicycle: function() {
+      throw new Error('抽象方法必須子類實現後才能調用')
+    }
   }
   // 組合寄生式繼承
   function inheritPrototype(subClass, superClass) {

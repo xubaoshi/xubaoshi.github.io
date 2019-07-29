@@ -1,150 +1,153 @@
 /**
- * 生成器模式
+ * 生成器(建造者)模式
  * 重心在于分离整体构建算法和部件构造。
- * 生成器（具体实现每部的对象） 指导者（指导装配过程）
+ * 将一个复杂对象的构造和它的表示分解为多个简单的对象，然后一步步构建而成
+ * 产品 、生成器（具体实现每部的对象）、指导者（指导装配过程）
  */
 
 // demo1
-;function() {
-  var InsuranceContract = (function() {
-    // 指导者
-    var InsuranceContract = function(builder) {
-      this.contractId = builder.getContractId()
-      this.personName = builder.getPersonName()
-      this.companyName = builder.getCompanyName()
-      this.beginDate = builder.getBeginDate()
-      this.endDate = builder.getEndDate()
-      this.otherDate = builder.getOtherDate()
+;(function() {
+  // Product
+  var Product = function() {
+    this.partA = null
+    this.partB = null
+    this.partC = null
+    this.setPartA = function(partA) {
+      this.partA = partA
     }
-    InsuranceContract.prototype = {
-      someOperation: function() {
-        console.log(
-          'Now in Insurance Contact someOperation = ' + this.contractId
-        )
-      }
+    this.setPartB = function(partB) {
+      this.partB = partB
     }
+    this.setPartC = function(partC) {
+      this.partC = partC
+    }
+    this.show = function() {
+      console.log('partA:', this.partA)
+      console.log('partB:', this.partB)
+      console.log('partC:', this.partC)
+    }
+  }
+  // Builder
+  var Builder = function() {
+    this.product = new Product()
+    this.buildPartA = function() {
+      this.product.setPartA('build partA!')
+    }
+    this.buildPartB = function() {
+      this.product.setPartB('build partB!')
+    }
+    this.buildPartC = function() {
+      this.product.setPartC('build partC!')
+    }
+    this.getResult = function() {
+      return this.product
+    }
+  }
+  // Director
+  var Director = function(builder) {
+    this.builder = builder
+    this.construct = function() {
+      this.builder.buildPartA()
+      this.builder.buildPartB()
+      this.builder.buildPartC()
+      return builder.getResult()
+    }
+  }
 
-    // 构造器
-    var ContractBuilder = function(contractId, beginDate, endDate) {
-      this.contractId = contractId
-      this.beginDate = beginDate
-      this.endDate = endDate
-    }
-    ContractBuilder.prototype = {
-      setPersonName: function(personName) {
-        this.personName = personName
-        return this
-      },
-      setCompanyName: function(companyName) {
-        this.companyName = companyName
-        return this
-      },
-      setOtherDate: function(otherDate) {
-        this.otherDate = otherDate
-        return this
-      },
-      getContractId: function() {
-        return this.contractId
-      },
-      getPersonName: function() {
-        return this.personName
-      },
-      getCompanyName: function() {
-        return this.companyName
-      },
-      getBeginDate: function() {
-        return this.beginDate
-      },
-      getEndDate: function() {
-        return this.endDate
-      },
-      getOtherDate: function() {
-        return this.otherDate
-      },
-      // 构建真正的对象并返回
-      build: function() {
-        if (!this.contractId || this.contractId.trim().length === 0) {
-          throw new Error('合同编号不能为空')
-        }
-        // ...
-        return new InsuranceContract(this)
-      }
-    }
-
-    InsuranceContract.ContractBuilder = ContractBuilder
-    return InsuranceContract
-  })()
-
-  var builder = new InsuranceContract.ContractBuilder('001', 123456, 6789)
-  var contract = builder
-    .setCompanyName(11111)
-    .setPersonName('luke')
-    .setOtherDate(12345678)
-    .build()
-  console.log(contract)
-}
+  // 使用
+  var builderInstance = new Builder()
+  var directorInstance = new Director(builderInstance)
+  var product = directorInstance.construct()
+  product.show()
+})
 
 // demo2 (生成器模式与简单工厂模式组合使用)
-;function(){
-function Shop() {
-  this.construct = function(builder) {
-    builder.step1()
-    builder.step2()
-    return builder.get()
+;(function() {
+  function Shop() {
+    this.construct = function(builder) {
+      builder.step1()
+      builder.step2()
+      return builder.get()
+    }
   }
-}
-function CarBuilder () {
-  this.car = null
-  this.step1 = function(){
-    this.car = new Car()
+  Shop.prototype = {
+    sell: function(model) {
+      return this.create(model)
+    },
+    create: function(model) {
+      var product
+      switch (model) {
+        case 'car':
+          var carBuilder = new CarBuilder()
+          product = this.construct(carBuilder)
+          break
+        case 'truck':
+          var truckBuilder = new TruckBuilder()
+          product = this.construct(truckBuilder)
+          break
+      }
+      return product
+    }
   }
-  this.step2 = function() {
-    this.car.addParts()
+  function CarBuilder() {
+    this.car = null
+    this.step1 = function() {
+      this.car = new Car()
+    }
+    this.step2 = function() {
+      this.car.addParts()
+    }
+    this.get = function() {
+      return this.car
+    }
   }
-  this.get = function(){
-    retun this.car
+  function TruckBuilder() {
+    this.truck = null
+    this.step1 = function() {
+      this.truck = new Truck()
+    }
+    this.step2 = function() {
+      this.truck.addParts()
+    }
+    this.get = function() {
+      return this.truck
+    }
   }
-}
-function TruckBuilder() {
-  this.truck = null
-  this.step1 = function() {
-    this.truck = new Truck()
+  function Car() {
+    this.doors = 0
+    this.addParts = function() {
+      this.doors = 4
+    }
+    this.say = function() {
+      console.log('i am a' + this.doors + '-door car')
+    }
   }
-  this.step2 = function(){
-    this.truck.addParts()
+  function Truck() {
+    this.doors = 0
+    this.addParts = function() {
+      this.doors = 2
+    }
+    this.say = function() {
+      console.log('i am a' + this.doors + '-truck car')
+    }
   }
-  this.get =  function() {
-    return this.truck
-  }
-}
-function Car() {
-  this.doors = 0
-  this.addParts = function() {
-    this.doors = 4
-  }
-  this.say = function(){
-    console.log('i am a' + this.doors + '-door car')
-  }
-}
-function Truck() {
-  this.doors = 0
-  this.addParts = function() {
-    this.doors = 2
-  }
-  this.say = function() {
-    console.log('i am a' + this.doors + '-door car')
-  }
-}
-function run() {
-   var shop = new Shop()
+  function run() {
+    var shop = new Shop()
+    var car = shop.sell('car')
+    var truck = shop.sell('truck')
 
-   var carBuilder = new CarBuilder()
-   var truckBuilder = new TruckBuilder()
+    car.say()
+    truck.say()
+  }
+  run()
+})()
 
-   var car = shop.construct(carBuilder)
-   var truck = shop.construct(truckBuilder)
-
-   car.say()
-   truck.say()
-}
-}()
+/**
+ * 生成器模式创建的是复杂对象，其产品的各个部分经常面临着剧烈的变化，但将他们组合在一起却又相对稳定。
+ * 1.创建的对象较复杂，由多个部件构成，各部件面临着复杂的变化，但部件之间构造顺序确实稳定的
+ * 2.产品的构建过程和对象内部各个部分的算法是相互独立的
+ *
+ *
+ * 抽象工厂模式的主要目的是创建产品簇，这个产品簇里面的单个产品就相当于是构成一个复杂对象的部件对象，
+ * 抽象工厂对象创建完成后就立即返回整个产品簇；而生成器模式的主要目的是按照构造算法，一步一步来构建一个复杂的产品对象。
+ */
