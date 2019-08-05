@@ -1,6 +1,9 @@
 /**
  * 原型模式
  * 使用 javaScript 特有的原型继承特性，创建一个对象作为另外一个对象的 prototype 属性值。
+ *
+ * 真正的原型继承是作为最新版的ECMAScript5标准提出的，使用Object.create方法来创建这样的对象，该方法创建指定的对象，
+ * 其对象的prototype有指定的对象（也就是该方法传进的第一个参数对象），也可以包含其他可选的指定属性
  */
 
 // Object.create
@@ -69,13 +72,12 @@
 
 // 另一种实现模式
 // 使用立即执行函数 通过使用闭包的方式隔离原型对象
-;(function(){
-  var beget = (function(){
+;(function() {
+  var beget = (function() {
     function F() {}
     return function(proto) {
       F.prototype = proto
       return new F()
     }
   })()
-}())
-
+})()
