@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '用户行为统计'
+title: 'web 端用户行为统计'
 date: '2019-08-10'
 author: 'XuBaoshi'
 header-img: 'img/post-bg-06.jpg'
