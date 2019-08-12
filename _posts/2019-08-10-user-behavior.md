@@ -1,5 +1,4 @@
-.
-git ---
+---
 layout: post
 title: '用户行为统计'
 date: '2019-08-10'
