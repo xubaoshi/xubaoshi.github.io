@@ -132,7 +132,7 @@ xpath 格式: /html/body/div
 
 ![/img/user-behavior/noCode.png](/img/user-behavior/noCode.png)
 
-![/img/user-behavior/noCode1.png](/img/user-behavior/noCode1.png)
+![/img/user-behavior/noCode1.png](/img/user-behavior/noCodeHttp.png)
 
 #### 总结
 
