@@ -1,33 +1,58 @@
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ site.description }}">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{{ site.description }}" />
 
-    <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
-    
-    <link rel="shortcut icon" href="favicon.ico">
+  <title>
+    {% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{
+      site.title
+    }}{% endif %}
+  </title>
 
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+  <link rel="shortcut icon" href="favicon.ico" />
 
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="{{ "/css/bootstrap.min.css" | prepend: site.baseurl }}">
+  <link
+    rel="canonical"
+    href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}"
+  />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ "/css/clean-blog.css" | prepend: site.baseurl }}">
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" href="{{
+    '/css/bootstrap.min.css' | prepend: site.baseurl
+  }}">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="{{ "/css/syntax.css" | prepend: site.baseurl }}">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{
+    '/css/clean-blog.css' | prepend: site.baseurl
+  }}">
 
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- Pygments Github CSS -->
+  <link rel="stylesheet" href="{{
+    '/css/syntax.css' | prepend: site.baseurl
+  }}">
 
-    <!-- GrowingIO Analytics code version 2.1 -->
-    <!-- Copyright 2015-2018 GrowingIO, Inc. More info available at http://www.growingio.com -->
+  <!-- Custom Fonts -->
+  <link
+    href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+    rel="stylesheet"
+    type="text/css"
+  />
 
-    <script type='text/javascript'>
+  <!-- GrowingIO Analytics code version 2.1 -->
+  <!-- Copyright 2015-2018 GrowingIO, Inc. More info available at http://www.growingio.com -->
+
+  <!-- <script type='text/javascript'>
         !function (e, t, n, g, i) { e[i] = e[i] || function () { (e[i].q = e[i].q || []).push(arguments) }, n = t.createElement("script"), tag = t.getElementsByTagName("script")[0], n.async = 1, n.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + g, tag.parentNode.insertBefore(n, tag) }(window, document, "script", "assets.giocdn.com/2.1/gio.js", "gio");
         gio('init', 'b128b8513bbcdea8', {});
 
@@ -37,11 +62,11 @@
 
         gio('send');
 
-    </script>
+    </script> -->
 
-    <!-- End GrowingIO Analytics code version: 2.1 -->
+  <!-- End GrowingIO Analytics code version: 2.1 -->
 
-    <script>var jyc_begin = new Date().getTime();</script>
+  <!-- <script>var jyc_begin = new Date().getTime();</script>
 
     <script type="text/javascript">
         (function () {
@@ -94,16 +119,78 @@
                 singlePage: false //是否是单页面应用（SPA），启用autoTrack后生效（选填，默认false）
             });
         })();
-    </script>
+    </script> -->
 
+  <script>
+    ;(function(para) {
+      var p = para.sdk_url,
+        n = para.name,
+        w = window,
+        d = document,
+        s = 'script',
+        x = null,
+        y = null
+      if (typeof w['sensorsDataAnalytic201505'] !== 'undefined') {
+        return false
+      }
+      w['sensorsDataAnalytic201505'] = n
+      w[n] =
+        w[n] ||
+        function(a) {
+          return function() {
+            ;(w[n]._q = w[n]._q || []).push([a, arguments])
+          }
+        }
+      var ifs = [
+        'track',
+        'quick',
+        'register',
+        'registerPage',
+        'registerOnce',
+        'trackSignup',
+        'trackAbtest',
+        'setProfile',
+        'setOnceProfile',
+        'appendProfile',
+        'incrementProfile',
+        'deleteProfile',
+        'unsetProfile',
+        'identify',
+        'login',
+        'logout',
+        'trackLink',
+        'clearAllRegister',
+        'getAppStatus'
+      ]
+      for (var i = 0; i < ifs.length; i++) {
+        w[n][ifs[i]] = w[n].call(null, ifs[i])
+      }
+      if (!w[n]._t) {
+        ;(x = d.createElement(s)), (y = d.getElementsByTagName(s)[0])
+        x.async = 1
+        x.src = p
+        x.setAttribute('charset', 'UTF-8')
+        w[n].para = para
+        y.parentNode.insertBefore(x, y)
+      }
+    })({
+      sdk_url:
+        'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/sensorsdata.min.js',
+      heatmap_url:
+        'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/heatmap.min.js',
+      name: 'sensors',
+      server_url:
+        'https://sademo.datasink.sensorsdata.cn/sa?token=******&project=B2BDemo'
+    })
+    sensors.quick('autoTrack')
+  </script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-    {% feed_meta %}
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
+  {% feed_meta %}
 </head>

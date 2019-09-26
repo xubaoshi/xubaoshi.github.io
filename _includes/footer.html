@@ -61,38 +61,9 @@
 <script src="{{ "/js/clean-blog.min.js " | prepend: site.baseurl }}"></script>
 
 <!--JYC SCRIPTCODE START-->
-<div id=jycjsdiv3803 style='display:none;'></div>
+<!-- <div id=jycjsdiv3803 style='display:none;'></div>
 <script
     type="text/javascript">var jyc_end = new Date().getTime(); (function () { document.writeln = function (s) { document.getElementById('jycjsdiv3803').innerHTML += s; return false; }; var jycjs = document.createElement('script'); jycjs.type = 'text/javascript'; jycjs.async = true; jycjs.charset = "utf-8"; jycjs.src = '//stat.adjyc.com/count/?uid=3803&logo=0&j_pop=0'; var jyc = document.getElementsByTagName('script')[0]; jyc.parentNode.insertBefore(jycjs, jyc); })();</script>
 <noscript><a href="//stat.adjyc.com/" target="_blank"><img border="0" width="1" height="1"
-            src="//stat.adjyc.com/count/stat_jyc.asp?uid=3803&vjs=0" title="JYC统计,助您决策!"></a></noscript>
+            src="//stat.adjyc.com/count/stat_jyc.asp?uid=3803&vjs=0" title="JYC统计,助您决策!"></a></noscript> -->
 <!--JYC SCRIPTCODE END-->
-
-<script>
-    (function (para) {
-        var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script', x = null, y = null;
-        if (typeof (w['sensorsDataAnalytic201505']) !== 'undefined') {
-            return false;
-        }
-        w['sensorsDataAnalytic201505'] = n;
-        w[n] = w[n] || function (a) { return function () { (w[n]._q = w[n]._q || []).push([a, arguments]); } };
-        var ifs = ['track', 'quick', 'register', 'registerPage', 'registerOnce', 'trackSignup', 'trackAbtest', 'setProfile', 'setOnceProfile', 'appendProfile', 'incrementProfile', 'deleteProfile', 'unsetProfile', 'identify', 'login', 'logout', 'trackLink', 'clearAllRegister', 'getAppStatus'];
-        for (var i = 0; i < ifs.length; i++) {
-            w[n][ifs[i]] = w[n].call(null, ifs[i]);
-        }
-        if (!w[n]._t) {
-            x = d.createElement(s), y = d.getElementsByTagName(s)[0];
-            x.async = 1;
-            x.src = p;
-            x.setAttribute('charset', 'UTF-8');
-            w[n].para = para;
-            y.parentNode.insertBefore(x, y);
-        }
-    })({
-        sdk_url: 'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/sensorsdata.min.js',
-        heatmap_url: 'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/heatmap.min.js',
-        name: 'sensors',
-        server_url: 'https://sademo.datasink.sensorsdata.cn/sa?token=******&project=B2BDemo'
-    });
-    sensors.quick('autoTrack');
-</script>
