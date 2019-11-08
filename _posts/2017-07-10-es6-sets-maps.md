@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-07-10-es6-sets-maps"
+title:      "es6-sets-maps"
 date:       "2017-07-10 "
 author:     "XuBaoshi"
 header-img: "img/post-bg-06.jpg"

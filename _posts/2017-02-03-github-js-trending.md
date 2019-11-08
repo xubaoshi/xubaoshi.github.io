@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-02-03-github-js-trending"
+title:      "github-js-trending"
 date:       "2017-02-03 13:52:00"
 author:     "XuBaoshi"
 header-img: "img/post-bg-01.jpg"

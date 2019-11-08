@@ -1,9 +1,9 @@
 ---
 layout: post
-title: 'javascript 设计模式'
-date: '2019-06-09'
+title: 'typescript 学习记录基础篇'
+date: '2019-11-07'
 author: 'XuBaoshi'
-header-img: 'img/node-module.jpg'
+header-img: 'img/post-bg-02.jpg'
 ---
 
 # javascript 设计模式

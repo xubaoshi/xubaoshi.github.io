@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-07-20-es6-iterators-generators"
+title:      "iterators-generators"
 date:       "2017-07-20"
 author:     "XuBaoshi"
 header-img: "img/post-bg-07.jpg"

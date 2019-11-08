@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-06-27-es6-function"
+title:      "es6-function"
 date:       "2017-06-27 "
 author:     "XuBaoshi"
 header-img: "img/post-bg-02.jpg"

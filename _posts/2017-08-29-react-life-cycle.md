@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-08-29-react生命周期"
+title:      "react生命周期"
 date:       "2017-08-29"
 author:     "XuBaoshi"
 header-img: "img/node-module.jpg"

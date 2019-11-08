@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "2017-06-07-js元素尺寸及偏移量总结"
+title:      "js元素尺寸及偏移量总结"
 date:       "2017-06-07 "
 author:     "XuBaoshi"
 header-img: "img/post-bg-02.jpg"
