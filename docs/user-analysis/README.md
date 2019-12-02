@@ -45,6 +45,7 @@ Object.defineProperty(Vue.prototype, '$uaTool', { value: uaTool })
 ## 配置参数
 
 ``` doc
+clientId                       String     项目标识
 serverUrl                      String     统计服务端 url
 sendType                       String     请求类型 目前支持 ajax（默认） image
 isSinglePage                   Boolean    是否为单页应用，默认（false）
@@ -52,80 +53,49 @@ isAutoTrackPv                  Boolean    是否自动上报 pv，默认（false
 isAutoTrackStay                Boolean    是否自动上报页面停留时间，默认（false）
 isAutoTackClick                Boolean    是否使用自动埋点，默认（false）
 trackElementTags               Array      自动埋点点监控的元素，默认：'a'、 'button'、 'input'、 'textarea'、'i', 可配合 html 标签 track-ignore 使用
+autoTrackIgnoreClass           Array      无埋点忽略监控样式集合
 useLocalTime                   Boolean    上报时间是否使用客户端时间，默认（true）
 ```
 
-## 上报属性
-
-### 所有事件均有的属性
+## 上报字段
 
 ``` doc
-uid                            String     标识用户的唯一的字符串
-sid                            String     标识页面唯一的字符串（同一个页面一段时间后会更新）
-userId                         String     预留统一权限字段
-version                        String     sdk 版本
-clientTime                     Number     上报时间
-properties                     Object     上报信息内容，事件类型不同属性也不同
-action                         String     事件类型
+| 字段          | 类型       |  备注  |
+| --------      | --------   | --------  
+| type          |  String    |   操作类型 pageView, pageClose  
+| uid           |   String   |   标识用户的唯一的字符串     
+| sid           |   String   |   标识页面唯一的字符串  
+| clientId      |   String   |   项目标识 
+| clientTime    |   Long     |   上报时间  
+| category      |   String   |   用户自定义  
+| action        |   String   |   用户自定义  
+| value         |   Obj      |   用户自定义，注意：value统一处理为String，value对象的key值不能包含day，time关键字，例如：**time  
+| label         |   String   |   标签，用户自定义  
+| userCode      |   String   |   用户编码,取cookie中的userCode  
+| sessionId     |   String   |   sessionId, 取cookie中JSESSIONID  
+| pageView      |   String   |   当前浏览页面  
+| prevPage      |   String   |   上次浏览页面  
+| urlPath       |   String   |   页面路径  
+| stay          |   Number   |   页面停留时间，如2.77表示2.77秒  
+| title         |   String   |   页面标题  
+| vwidth        |   Number   |   视窗宽度，如1280  
+| vheight       |   Number   |   视窗高度，如800 
+| swidth        |   Number   |   视窗宽度，如1280  
+| sheight       |   Number   |   视窗高度，如800 
+| dpr           |   Number   |   物理像素分辨率与 CSS 像素分辨率的比率  
+| ua            |   String   |   客户机发送服务器的 user-agent 头部值  
+| appName       |   String   |   浏览器名称  
+| appVer        |   String   |   浏览器版本  
+| platform      |   String   |   平台  
+| lang          |   String   |   浏览器语言  
+| etype         |   String   |   元素类型 
+| ename         |   String   |   元素 name 属性 
+| eid           |   String   |   元素 Id 属性 
+| eclassname    |   String   |   元素 class 属性 
+| etargeturl    |   String   |   如果为 a 标签 对应的 href 属性 
+| econtent      |   String   |   元素文本，如果为 i 标签文本内容为 title 
 ```
 
-#### action 说明
-
-预置事件类型说明（自定义事件除外）
-
-``` doc
-pageclose                      String     页面停留
-webClick                       String     页面点击
-pageView                       String     pv
-```
-
-### properties 均有属性
-
-``` doc
-url                            String     页面 url
-title                          String     页面 title
-viewportWidth                  Number     视窗宽度
-viewportHeight                 Number     视窗高度
-screenWidth                    Number     屏幕宽度
-screenheight                   Number     屏幕高度
-devicePixelRatio               Number     物理像素分辨率与 CSS 像素分辨率的比率
-```
-
-### userAgent 属性（properties中）
-
-``` doc
-longitude                      String     经度
-latitude                       String     维度
-appName                        String     浏览器名称
-appVer                         String     浏览器版本
-platform                       String     平台
-userAgent                      String     客户机发送服务器的 user-agent 头部值
-browserLanguage                String     浏览器语言
-```
-
-### pv 属性（properties中）
-
-``` doc
-referrer                       String     页面来源
-urlPath                        String     页面路径
-```
-
-### 页面停留时间（properties中）
-
-``` doc
-pageStayTime                   Number     页面停留时间
-```
-
-### 页面事件属性（properties中）
-
-``` doc
-elementType                     String     元素类型
-elementName                     String     元素 name 属性
-elementId                       String     元素 Id 属性
-elementClassName                String     元素 class 属性
-elementTargetUrl                String     如果为 a 标签 对应的 href 属性
-elementContent                  String     元素文本，如果为 i 标签文本内容为 title
-```
 
 ## 实现原理
 
@@ -152,14 +122,14 @@ window.onload = function() {
 
 单页应用，页面加载初始化只有一次,目前主流的单页应用大部分都是基于 browserHistory (history api) 或者 hashHistory 来做路由处理，我们可以通过监听路由变化来判断页面是否有可能切换。
 
-hashHistory  
-hash 的变化可以通过 hashchange 来监听。  
+hashHistory
+hash 的变化可以通过 hashchange 来监听。
 
-browserHistory  
-history api 提供 onpopstate 事件监听浏览器前进后退的事件，但  History.pushState() 或 History.replaceState() 触发时 onpopstate 事件无法监听到。运行时重写 history.pushState 和 history.replaceState 。  
+browserHistory
+history api 提供 onpopstate 事件监听浏览器前进后退的事件，但  History.pushState() 或 History.replaceState() 触发时 onpopstate 事件无法监听到。运行时重写 history.pushState 和 history.replaceState 。
 
 ``` javascript
-let _wr =  function (type) {  
+let _wr =  function (type) {
   let orig = window.history[type]
   return  function () {
     let rv = orig.apply(this, arguments)
@@ -169,9 +139,9 @@ let _wr =  function (type) {
     return rv
   }
 }
-window.history.pushState = _wr('pushState')  
+window.history.pushState = _wr('pushState')
 window.history.replaceState = _wr('replaceState')
-window.addEventListener('pushstate',  function (event) {})  
+window.addEventListener('pushstate',  function (event) {})
 window.addEventListener('replacestate',  function (event) {})
 ```
 
@@ -182,7 +152,7 @@ window.addEventListener('replacestate',  function (event) {})
 #### 多页应用
 
 ``` javascript
-  
+
   window.addEventListener('load', function (data) {
       // 开始计时
   })
@@ -209,7 +179,7 @@ window.addEventListener('replacestate',  function (event) {})
     window.addEventListener('hashchange', function (data) {
     })
   }
-  
+
   // ...
 
   // 计时操作
@@ -221,8 +191,8 @@ window.addEventListener('replacestate',  function (event) {})
     if (startTime) {
       endTime = new Date()
       duration = (endTime.getTime() - startTime.getTime()) / 1000
-      trackFn('pageclose', {
-        pageStayTime: duration,
+      trackFn('pageClose', {
+        stay: duration,
         url: pageInfo && pageInfo.from.length > 0 ? pageInfo.from.join('#') : window.location.href,
         title: document.title
       }, config)
@@ -244,20 +214,34 @@ window.addEventListener('replacestate',  function (event) {})
 #### script 引入
 
 ``` javascript
-uaTool.track('CustomEvent', {
-  // ...
-  $elementContent: '自定义埋点测试'
+uaTool.track({
+  action: 'CustomEvent',
+  category: '',
+  label: '',
+  value: ''
 })
 ```
 
 #### es6 import 引入 (vue)
 
 ``` javascript
-this.$uaTool.track('CustomEvent', {
-  // ...
-  $elementContent: '自定义埋点测试'
+this.$uaTool.track({
+  action: 'CustomEvent',
+  category: '',
+  label: '',
+  value: ''
 })
 ```
+
+#### data-track-* 使用方法
+
+当设置 `isAutoTackClick = true` 时可以使用 `data-track-*` ， 作用同上两个方法，标签属性设置手动埋点参数代码如下：
+
+``` html
+<button data-track-action="CustomEvent" data-track-label="" data-track-value="" data-track-categoty=""></button>
+```
+ps: 监控的元素范围为 `trackElementTags` 所设置的元素，默认元素有 'a'、 'button'、 'input'、 'textarea'、'i'
+
 
 ### track-ignore
 
