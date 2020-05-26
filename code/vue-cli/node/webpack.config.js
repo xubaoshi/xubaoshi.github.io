@@ -1,15 +1,18 @@
 const path = require('path')
 
 module.exports = {
-  entry: path.join(__dirname, 'src/index.js'),
+  mode: 'development',
+  entry: path.join(__dirname, 'src/index1.js'),
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/dist/',
   },
-  resolve: {
-    // extensions: ['.ext', '.js'],
-    extensions: ['.ext', '.js', '.json'],
+  node: {
+    global: true,
+    process: true,
+    __filename: 'mock',
+    __dirname: 'mock',
   },
   module: {
     rules: [

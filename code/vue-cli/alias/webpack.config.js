@@ -8,8 +8,10 @@ module.exports = {
     publicPath: '/dist/',
   },
   resolve: {
-    // extensions: ['.ext', '.js'],
-    extensions: ['.ext', '.js', '.json'],
+    alias: {
+      testA: path.resolve(__dirname, 'src/testA'),
+      test$: path.resolve(__dirname, 'src/test.js'),
+    },
   },
   module: {
     rules: [
