@@ -1,0 +1,10 @@
+.small {
+  width: 200px;
+  height: 200px;
+  background: url(../img/small.png) no-repeat;
+}
+.big {
+  width: 500px;
+  height: 350px;
+  background: url(../img/big.png) no-repeat;
+}
