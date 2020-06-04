@@ -73,3 +73,22 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
 6. 捕获网站的时间线，帮助诊断性能问题
 7. 创建一个最新的自动化测试环境，使用 js 和 Chrome 浏览器运行测试用例
 8. ......
+
+## puppeteer API 分层结构
+
+![/img/puppeteer/tree.png](/img/puppeteer/tree.png)
+
+puppeteer 涉及的主要概念如下：
+
+1. Browser 对应一个浏览器实例， 一个 Browser 可以包含多个 BrowserContext
+2. BrowserContext 对应一个浏览器的上下文 可以理解为一个浏览器的窗口， 比如有的时候我们会同时打开一个普通的窗口和一个无痕的窗口。其中 BrowserContext 之间 Session 、Cookie 等都是相互独立的互不影响。 一个 BrowserContext 包含多个 Page。
+3. Page 表示一个 Tab 页面， 可以通过 `browserContext.newPage()/browser.newPage()` 创建， 区别在于 `browser.newPage()` 会调用默认的 `browserContext` 创建。一个 Page 包含多个 Frame
+4. Frame 一个框架 可以理解为 html 中的 iframe 标签
+5. ExecutionContext 是 javascript 的执行环境
+6. ElementHandle 对应 DOM 的一个元素节点， 通过该实例可以实现对元素的点击及填写表单等行为。可以通过选择器或 xpath 获取对应的元素
+7. JSHandle 表示一个页面内 JavaScript 对象。 JSHandles 可以使用 page.evaluateHandle 方法创建。， ElementHandle 继承自 JsHandle
+8. CDPSession 可以直接与原生的 Chrome DevTools Protocol 通信，通过 `session.send` 调用及 `session.on` 方法订阅
+9. Coverage 收集相关页面使用的 javascript 及 css 信息
+10. Tracing 抓取性能数据进行分析， 通过使用 `tracing.start` 和 `trace.stop` 创建一个可以在 Chrome DevTools 或者 timeline viewer 中打开的跟踪文件
+11. Response 页面收到的响应 可以基于 `page.on('request',() => {})` 监听页面的请求
+12. Request 页面发出的请求 可以基于 `page.on('reponse',() => {})` 监听页面的请求
