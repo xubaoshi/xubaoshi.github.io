@@ -90,5 +90,5 @@ puppeteer 涉及的主要概念如下：
 8. CDPSession 可以直接与原生的 Chrome DevTools Protocol 通信，通过 `session.send` 调用及 `session.on` 方法订阅
 9. Coverage 收集相关页面使用的 javascript 及 css 信息
 10. Tracing 抓取性能数据进行分析， 通过使用 `tracing.start` 和 `trace.stop` 创建一个可以在 Chrome DevTools 或者 timeline viewer 中打开的跟踪文件
-11. Response 页面收到的响应 可以基于 `page.on('request',() => {})` 监听页面的请求
-12. Request 页面发出的请求 可以基于 `page.on('reponse',() => {})` 监听页面的请求
+11. Request 页面收到的响应 可以基于 `page.on('request',() => {})` 监听页面的请求
+12. Response 页面发出的请求 可以基于 `page.on('reponse',() => {})` 监听页面的返回结果
