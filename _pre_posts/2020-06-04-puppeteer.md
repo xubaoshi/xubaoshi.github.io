@@ -35,7 +35,7 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
 "C:\Users\baoshi\AppData\Local\Google\Chrome\Application\chrome" --headless --disable-gpu --screenshot=H:\output.png https://www.baidu.com
 ```
 
-![/img/puppeteer/headless1.png](/img/puppeteer/headless1.png)
+![/img/puppeteer/headless2.png](/img/puppeteer/headless2.png)
 
 访问页面并将页面输出为 pdf 文件
 
@@ -43,7 +43,7 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
  "C:\Users\baoshi\AppData\Local\Google\Chrome\Application\chrome" --headless --disable-gpu --print-to-pdf=H:\output.pdf https://www.baidu.com
 ```
 
-![/img/puppeteer/headless2.png](/img/puppeteer/headless2.png)
+![/img/puppeteer/headless1.png](/img/puppeteer/headless1.png)
 
 访问页面并下载页面 dom
 
@@ -63,10 +63,10 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
 
 ![/img/puppeteer/headless5.png](/img/puppeteer/headless5.png)
 
-## puppteer 能做什么
+## puppeteer 能做什么
 
-1. puppteer 通过封装了 Chrome DevTools Protocol 的接口，从而控制 Chromium/Chrome 浏览器的行为
-2. puppteer 默认以 headless 模式启动 Chrome，可以通过设计参数启动有界面的 Chrome
+1. puppeteer 通过封装了 Chrome DevTools Protocol 的接口，从而控制 Chromium/Chrome 浏览器的行为
+2. puppeteer 默认以 headless 模式启动 Chrome，可以通过设计参数启动有界面的 Chrome
 3. 网页截图或者生成 PDF
 4. 爬取 SPA 或 SSR 网站
 5. UI 自动化测试，模拟表单提交，键盘输入，点击等行为
@@ -81,7 +81,7 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
 puppeteer 涉及的主要概念如下：
 
 1. Browser 对应一个浏览器实例， 一个 Browser 可以包含多个 BrowserContext
-2. BrowserContext 对应一个浏览器的上下文 可以理解为一个浏览器的窗口， 比如有的时候我们会同时打开一个普通的窗口和一个无痕的窗口。其中 BrowserContext 之间 Session 、Cookie 等都是相互独立的互不影响。 一个 BrowserContext 包含多个 Page。
+2. BrowserContext 对应一个浏览器的上下文会话，当浏览器启动时，它已经默认使用一个 BrowserContext, 通过使用 `browser.createIncognitoBrowserContext()` 方法创建隐藏的浏览器上下文。其中 BrowserContext 之间 Session 、Cookie 等都是相互独立的互不影响。 一个 BrowserContext 包含多个 Page。
 3. Page 表示一个 Tab 页面， 可以通过 `browserContext.newPage()/browser.newPage()` 创建， 区别在于 `browser.newPage()` 会调用默认的 `browserContext` 创建。一个 Page 包含多个 Frame
 4. Frame 一个框架 可以理解为 html 中的 iframe 标签
 5. ExecutionContext 是 javascript 的执行环境
@@ -92,3 +92,285 @@ puppeteer 涉及的主要概念如下：
 10. Tracing 抓取性能数据进行分析， 通过使用 `tracing.start` 和 `trace.stop` 创建一个可以在 Chrome DevTools 或者 timeline viewer 中打开的跟踪文件
 11. Request 页面收到的响应 可以基于 `page.on('request',() => {})` 监听页面的请求
 12. Response 页面发出的请求 可以基于 `page.on('reponse',() => {})` 监听页面的返回结果
+
+## 创建 Browser 实例
+
+1. puppeteer.connect 连接一个已经存在的 chrome 实例
+2. puppeteer.launch 每次都启动一个 Chrome 实例
+
+launch
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+    slowMo: 100,
+    args: ['--no-sandbox', '--window-size=1280,960'],
+  })
+  const page = await browser.newPage()
+  await page.goto('https://www.baidu.com')
+})()
+```
+
+connect
+
+```javascript
+const puppeteer = require('puppeteer')
+
+let browserWSEndpoint = ''
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+    slowMo: 100,
+    args: ['--no-sandbox', '--window-size=1280,960'],
+  })
+  browserWSEndpoint = browser.wsEndpoint()
+  // 从Chromium断开和puppeteer的连接
+  browser.disconnect()
+
+  //直接连接已经存在的 Chrome
+  const browser2 = await puppeteer.connect({ browserWSEndpoint })
+  const page = await browser2.newPage()
+  await page.goto('https://www.baidu.com')
+})()
+```
+
+## 如何等待加载
+
+往往我们使用 puppeteer 在页面执行或加载的某一时机截图或者获取页面信息。以下将等带加载的 api 分为以下三类：
+
+### 加载导航页面
+
+1. page.goto 代开新页面
+2. page.goBack 回退到上一个页面
+3. page.goForward 前进到下一个页面
+4. page.reload 重新加载页面
+5. page.waitForNavigation 等待页面跳转
+
+这些 api 都可以通过使用 waitUntil 配置达到满足条件认为页面跳转完成。默认 load 事件触发时，页面加载完成。
+
+1. load 页面的 load 事件触发
+2. domcontentloaded 页面的 DOMContentLoaded 事件触发
+3. networkidle0 不再有网络连接时触发
+4. networkidle2 只有两个网络连接时触发
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    slowMo: 100,
+    headless: false,
+    args: ['--no-sandbox', '--window-size=1280,960'],
+  })
+  const page = await browser.newPage()
+  await page.goto('http://www.baidu.com', {
+    // timeout 表示如果超过这个时间还没有结束就抛出异常
+    timeout: 30 * 1000,
+    waitUtil: ['networkidle0'],
+  })
+  console.log('page load finished!')
+})()
+```
+
+### 等待元素、请求、响应
+
+1. page.waitForXPath 等待 XPath 对应的元素出现， 返回对应的 ElementHandle 实例
+2. page.waitForSelector 等待选择器对应的元素出现，返回对应的 ElementHandle 实例
+3. page.waitForResponse 等待某个响应结束， 返回 Response 实例
+4. page.waitForRequest 等待某个请求出现， 返回 Request 实例
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    slowMo: 100,
+    headless: false,
+    args: ['--no-sandbox', '--window-size=1280,960'],
+  })
+  const page = await browser.newPage()
+  page.goto('http://www.baidu.com')
+
+  const image = await page.waitForXPath('//img')
+  console.log('image', image)
+
+  const selector = await page.waitForSelector(
+    '[href="http://xueshu.baidu.com"]'
+  )
+  console.log('selector', selector)
+
+  const request = await page.waitForRequest(
+    'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
+  )
+  console.log('request', request)
+
+  const respone = await page.waitForResponse(
+    'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
+  )
+  console.log('respone', respone)
+})()
+```
+
+### 自定义等待
+
+1. page.waitForFunction 等待页面中自定义函数的执行结果，返回 JsHandle 实例， 其中第一个参数要在浏览器实例上下文执行的方法
+2. page.waitFor 设置等待时间
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    slowMo: 100,
+    headless: false,
+    args: ['--no-sandbox', '--window-size=1280,960'],
+  })
+  const page = await browser.newPage()
+  await page.goto('http://www.baidu.com')
+  await page.waitFor(5000)
+  console.log('waitFor finished')
+  await page.setViewport({
+    width: 50,
+    height: 50,
+  })
+  await page.waitForFunction('window.innerWidth < 100')
+  console.log('waitForFunction finished')
+})()
+```
+
+## 截图
+
+### 屏幕截图
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto('https://www.baidu.com')
+  // 页面截图
+  await page.screenshot({
+    path: './files/capture.png',
+    type: 'png',
+    fullPage: true,
+  })
+  console.log('page captured!')
+})()
+```
+
+### Dom 元素截图
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto('https://www.baidu.com')
+  // 页面元素截图
+  const element = await page.$('#su')
+  await element.screenshot({
+    path: './files/button.png',
+    type: 'png',
+  })
+  console.log('button captured!')
+})()
+```
+
+1. `page.$('.classname')` 获取某个选择器对应的第一个元素 querySelector
+2. `page.$$('.classname')`获取某个选择器对应所有元素 querySelectorAll
+3. `page.$x('//img')` 获取某个 xPath 对应的所有元素
+4. `page.waitForXPath('//img')` 等待某个 xPath 对应的元素出现
+5. `page.waitForSelector('.classname')` 等待某个选择器对应的元素出现
+
+## 模拟用户登录
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+  })
+  const page = await browser.newPage()
+  await page.goto('http://10.9.9.76:8801/iomp', {
+    waitUntil: 'networkidle0',
+  })
+  const username = await page.$('[placeholder="请输入用户名"]')
+  const password = await page.$('[placeholder="请输入用户密码"]')
+  const button = await page.$('.el-button--primary')
+  await username.type('admin', { delay: 50 })
+  await password.type('kedacom', { delay: 50 })
+
+  // 待页面跳转完成，一般点击某个按钮需要跳转时，都需要等待 page.waitForNavigation() 执行完毕才表示跳转成功
+  await Promise.all([button.click(), page.waitForNavigation()])
+
+  await page.screenshot({
+    path: './files/home.png',
+    type: 'png',
+  })
+
+  console.log()
+  page.close()
+  browser.close()
+})()
+```
+
+ElementHandle 提供了一下操作元素的方法
+
+1. elementHandle.click() 点击某个元素
+2. elementHandle.tap() 模拟手指触摸点击
+3. elementHandle.focus() 聚焦点击某个元素
+4. elementHandle.hover() 鼠标 hover 到某个元素上
+5. elemntHandle.type('hello') 在输入框输入文本
+
+## 请求拦截
+
+## 获取 WebSocket 响应
+
+## 植入 javascript 代码
+
+## 抓取 iframe 中的元素
+
+## 页面性能分析
+
+## 文件上传和下载
+
+## 模拟不同设备
+
+## puppeteer 团队内应用场景
+
+### 定时任务
+
+设置定时任务，执行系统中某些关键操作，并将执行结构报告定时邮件发送。
+
+### 自动化测试（Chrome 环境）
+
+1. 模拟浏览器发送请求
+2. 模拟用户操作
+3. 各个系统页面间集成测试
+
+## phantomjs vs puppeteer
+
+phantomjs 是 一个基于 webkit 内核的无头浏览器，没有 UI 界面。
+
+虽然 phantomjs 是 fully functional headless browser，但是它和真正的浏览器还是有很大的差别，并不能完全模拟真实的用户操作。Headless Chrome 是 Chrome 浏览器的无界面形态，可以在不打开浏览器的前提下使用所有 Chrome 支持的特性。更加便利的调试，我们只需要在命令行中加入--remote-debugging-port=9222，再打开浏览器输入 localhost:9222(ip 为实际运行命令的 ip 地址)就能进入调试界面。
+
+随着 phantomjs 使用，phantomjs bug 越来越多，同时此项目目前无人维护了。
+
+## selenium vs puppeteer
+
+selenium 与 puppeteer 都是基于 Chrome DevTools Protocol 来操控 Chrome 的。了解 selenium 需要提前了解一下 webdriver。
+
+selenium 2，又名 WebDriver，它的主要新功能是集成了 selenium 1.0 以及 WebDriver（WebDriver 曾经是 selenium 的竞争对手）。也就是说 selenium 2 是 selenium 和 webDriver 两个项目的合并，即 selenium 2 兼容 Selenium，它既支持 selenium API 也支持 webDriver API。
+
+selenium 是一个大而全的解决方案，可以用 C#， Java， JS， Python，Ruby 开发，支持 IE，FireFox， Safari，Chrome，andriod Chrome。 selenium 的目的是一套脚本运行在不同浏览器上，可以做兼容性测试。
+
+![/img/puppeteer/seleniumjpg.jpg](/img/puppeteer/seleniumjpg.jpg)
+
+puppeteer 专注于 Chromium 的功能测试,目前只能使用 js 开发， 如果不考虑兼容性，puppeteer 可以带来更好的性能（少了一层调用的原因），更多的功能。
