@@ -357,9 +357,15 @@ ElementHandle 提供了一下操作元素的方法
 
 ## phantomjs vs puppeteer
 
-phantomjs 是 一个基于 webkit 内核的无头浏览器，没有 UI 界面。
+phantomjs 是 一个基于 webkit 内核(较老版本)的无头浏览器，没有 UI 界面。
 
-虽然 phantomjs 是 fully functional headless browser，但是它和真正的浏览器还是有很大的差别，并不能完全模拟真实的用户操作。Headless Chrome 是 Chrome 浏览器的无界面形态，可以在不打开浏览器的前提下使用所有 Chrome 支持的特性。更加便利的调试，我们只需要在命令行中加入--remote-debugging-port=9222，再打开浏览器输入 localhost:9222(ip 为实际运行命令的 ip 地址)就能进入调试界面。
+虽然 phantomjs 是 fully functional headless browser，但是它和真正的浏览器还是有很大的差别，并不能完全模拟真实的用户操作。Headless Chrome 是 Chrome 浏览器的无界面形态，可以在不打开浏览器的前提下使用所有 Chrome 支持的特性。
+
+更加便利的调试，我们只需要在命令行中加入--remote-debugging-port=9222，再打开浏览器输入 localhost:9222(ip 为实际运行命令的 ip 地址)就能进入调试界面。
+
+puppeteer 比 phantomjs 拥有更好的性能，下图为 Chrome 60.0.3112.113 和 phantomjs 2.1.1 ，相同的页面加载 1000 对比结果。
+
+![/img/puppeteer/phantom.jpg](/img/puppeteer/phantom.jpg)
 
 随着 phantomjs 使用，phantomjs bug 越来越多，同时此项目目前无人维护了。
 
@@ -374,3 +380,5 @@ selenium 是一个大而全的解决方案，可以用 C#， Java， JS， Pytho
 ![/img/puppeteer/seleniumjpg.jpg](/img/puppeteer/seleniumjpg.jpg)
 
 puppeteer 专注于 Chromium 的功能测试,目前只能使用 js 开发， 如果不考虑兼容性，puppeteer 可以带来更好的性能（少了一层调用的原因），更多的功能。
+
+[puppeteer api 中文文档](https://www.bookstack.cn/read/puppeteer-api-zh_CN/class-JSHandle.md)
