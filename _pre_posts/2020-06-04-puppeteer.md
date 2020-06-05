@@ -331,6 +331,8 @@ ElementHandle 提供了一下操作元素的方法
 
 ## 请求拦截
 
+请求的拦截需要提前开启 `page.setRequestInterception(true)`
+
 ## 获取 WebSocket 响应
 
 ## 植入 javascript 代码
