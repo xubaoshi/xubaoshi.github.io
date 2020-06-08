@@ -16,6 +16,8 @@ puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开
 
 使用 puppeteer 实际上是通过调用 Chrome DevTools 开放的接口与 Chrome 通信。 Chrome DevTools 的接口很复杂， puppeteer 为此封装了一些调用方便的接口供使用。
 
+puppeteer 要求使用 Node v6.4.0，但实际代码中大量使用 async/await，需要 Node v7.6.0 及以上
+
 ## [Chrome DevTool Protocol](https://chromedevtools.github.io/devtools-protocol/)
 
 1. 基于 websocket 实现与浏览器内核的快速数据通道
@@ -333,13 +335,165 @@ ElementHandle 提供了一下操作元素的方法
 
 请求的拦截需要提前开启 `page.setRequestInterception(true)`
 
+监听的请求的类型有： document，stylesheet，image，media，font，script，texttrack，xhr，fetch，eventsource，websocket，manifest，other
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+  })
+  const page = await browser.newPage()
+  const blockTypes = ['image']
+  // 开启拦截请求
+  await page.setRequestInterception(true)
+  page.on('request', (request) => {
+    const type = request.resourceType()
+    const shouldBlock = blockTypes.includes(type)
+    if (shouldBlock) {
+      return request.abort()
+    } else {
+      // 重写请求
+      return request.continue({
+        headers: Object.assign({}, request.headers, {
+          'puppeteer-test': 'true',
+        }),
+      })
+    }
+  })
+  await page.goto('https://www.baidu.com')
+})()
+```
+
+page 对象除了监听 request， 也可以监听一下事件：
+
+1. `page.on('close')` 页面关闭
+2. `page.on('console')` console API 被调用
+3. `page.on('error')` 页面出错
+4. `page.on('load')` 页面加载完成
+5. `page.on('request')` 收到请求
+6. `page.on('requestfailed')` 请求失败
+7. `page.on('requestfinished')` 页面中某个请求成功
+8. `page.on('response')` 收到响应
+
 ## 获取 WebSocket 响应
+
+puppeteer 目前没有提供原生的用于处理 WebSocket 的 API 接口， 但是我们可以通过更底层的 Chrome DevTool Protocol(CDP) 实现， 也就是上面提到的 `CDPSession`。
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+  })
+  const page = await browser.newPage()
+
+  // 创建 cdp 会话
+  let cdpSession = await page.target().createCDPSession()
+  // 开启网络调试，监听 Chrome DevTools Protocol 中 Network 事件
+  await cdpSession.send('Network.enable')
+  // 监听 websocket received 事件
+  cdpSession.on('Network.webSocketFrameReceived', (frame) => {
+    let payloadData = frame.response.payloadData
+    console.log('websocket payloadData:', payloadData)
+  })
+  // 进入页面触发 websocket 按钮
+  await page.goto('http://10.9.9.76:8801/iomp/#/login', {
+    waitUntil: 'networkidle0',
+  })
+  const username = await page.$('[placeholder="请输入用户名"]')
+  const password = await page.$('[placeholder="请输入用户密码"]')
+  const button = await page.$('.el-button--primary')
+  await username.type('admin', { delay: 50 })
+  await password.type('kedacom', { delay: 50 })
+  await Promise.all([button.click(), page.waitForNavigation()])
+  await page.goto('http://10.9.9.76:8801/iomp/#/service/list')
+  await page.waitFor(4000)
+  const terminal = await page.$('.icon-zhongduan')
+  await terminal.click()
+})()
+```
 
 ## 植入 javascript 代码
 
-## 抓取 iframe 中的元素
+puppeteer 最强大的功能是，可以在浏览器中执行任何想到运行的 javascript 代码。
+
+```javascript
+const puppeteer = require('puppeteer')
+
+;(async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+  })
+  const page = await browser.newPage()
+  await page.goto('https://www.baidu.com', {
+    waitUntil: 'networkidle0',
+  })
+  await page.evaluate(async () => {
+    const element = document.querySelector('#su')
+    element.style.color = 'red'
+  })
+})()
+```
+
+除了 evaluate 方法外， page 还提供以下方法：
+
+1.`page.evaluateHandle` 与 `page.evaluate` 的区别在于， `page.evaluateHandle` 执行完成后返回 JSHandle 对象，此 JSHandle 对象 ，可作为 page.evaluateHandle 的参数，传递给内部的 pageFunction 使用
+
+```javascript
+const aHandle = await page.evaluateHandle('document') // 'document'对象
+const aHandle = await page.evaluateHandle(() => document.body)
+const resultHandle = await page.evaluateHandle(
+  (body) => body.innerHTML,
+  aHandle
+)
+console.log(await resultHandle.jsonValue())
+await resultHandle.dispose()
+```
+
+2.`page.$$eval` 把 selector 对应的所有元素传入到第二个函数参数中，供在浏览器环境中执行
+
+```javascript
+const divsCounts = await page.$$eval('div', (divs) => divs.length)
+```
+
+3.`page.$eval` 把 selector 匹配的第一个元素传入到第二个函数参数中，供在浏览器环境中执行
+
+```javascript
+const searchValue = await page.$eval('#search', (el) => el.value)
+const preloadHref = await page.$eval('link[rel=preload]', (el) => el.href)
+const html = await page.$eval('.main-container', (e) => e.outerHTML)
+```
+
+4.`page.evaluateOnNewDocument`指定的函数在所属的页面被创建并且所属页面的任意 script 执行。1. 页面导航完成后 2. 页面的 iframe 加载或导航完成  
+5.`page.exposeFunction` 添加一个挂载到浏览器 window 的方法， 当执行新添加的方法后， 实际上是调用 nodejs 中的方法
+
+```javascript
+const puppeteer = require('puppeteer')
+const crypto = require('crypto')
+puppeteer.launch().then(async (browser) => {
+  const page = await browser.newPage()
+  page.on('console', (msg) => console.log(msg.text()))
+  await page.exposeFunction('md5', (text) =>
+    crypto.createHash('md5').update(text).digest('hex')
+  )
+  await page.evaluate(async () => {
+    // use window.md5 to compute hashes
+    const myString = 'PUPPETEER'
+    const myHash = await window.md5(myString)
+    console.log(`md5 of ${myString} is ${myHash}`)
+  })
+  await browser.close()
+})
+```
 
 ## 页面性能分析
+
+puppeteer 提供的 trace 功能很简单，可以使用 tracing.start 和 tracing.stop 创建一个可以在 Chrome DevTools or timeline viewer 中打开的跟踪文件
+
+
 
 ## 文件上传和下载
 
@@ -347,15 +501,11 @@ ElementHandle 提供了一下操作元素的方法
 
 ## puppeteer 团队内应用场景
 
-### 定时任务
+### 巡检任务
 
-设置定时任务，执行系统中某些关键操作，并将执行结构报告定时邮件发送。
+系统内某些关键的操作流程，我们可以通过 puppeteer 定时访问并执行操作，并将执行结果报告定时邮件发送。
 
-### 自动化测试（Chrome 环境）
-
-1. 模拟浏览器发送请求
-2. 模拟用户操作
-3. 各个系统页面间集成测试
+以海豚发布项目为例，发布流程为此系统的关键流程，巡检代码如下：
 
 ## phantomjs vs puppeteer
 
