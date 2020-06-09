@@ -489,16 +489,6 @@ puppeteer.launch().then(async (browser) => {
 })
 ```
 
-## 页面性能分析
-
-puppeteer 提供的 trace 功能很简单，可以使用 tracing.start 和 tracing.stop 创建一个可以在 Chrome DevTools or timeline viewer 中打开的跟踪文件
-
-
-
-## 文件上传和下载
-
-## 模拟不同设备
-
 ## puppeteer 团队内应用场景
 
 ### 巡检任务
