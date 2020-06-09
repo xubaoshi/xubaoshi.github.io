@@ -182,8 +182,6 @@ const puppeteer = require('puppeteer')
 
 1. page.waitForXPath 等待 XPath 对应的元素出现， 返回对应的 ElementHandle 实例
 2. page.waitForSelector 等待选择器对应的元素出现，返回对应的 ElementHandle 实例
-3. page.waitForResponse 等待某个响应结束， 返回 Response 实例
-4. page.waitForRequest 等待某个请求出现， 返回 Request 实例
 
 ```javascript
 const puppeteer = require('puppeteer')
