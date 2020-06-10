@@ -4,7 +4,9 @@ const puppeteer = require('puppeteer')
   const browser = await puppeteer.launch({
     slowMo: 100,
     headless: false,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   page.goto('http://www.baidu.com')
@@ -21,7 +23,7 @@ const puppeteer = require('puppeteer')
     'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
   )
   console.log('request', request)
-  
+
   const respone = await page.waitForResponse(
     'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
   )
