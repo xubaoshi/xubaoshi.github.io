@@ -97,10 +97,12 @@ const domInspect = async (page, browser) => {
     window.handleApply = function () {
       const $rows = document.querySelectorAll('.el-table__row')
       if ($rows && $rows.length > 0) {
-        const $row = $rows.firstChild
-        const $status = $row.querySelector('.el_state_dot')
-        console.log($status)
-        return $status && $status.innerText === '部署完成'
+        const $row = $rows[0]
+        const $status = $row.querySelector('[prop="statusLabel"]')
+        console.log('$status.innerText:', $status.innerText)
+        let innerText = $status.innerText
+        innerText = innerText.trim ? innerText.trim() : innerText
+        return $status && innerText === '部署完成'
       }
     }
   })
@@ -108,6 +110,7 @@ const domInspect = async (page, browser) => {
   try {
     await page.waitForFunction('window.handleApply()', {
       timeout: 20 * 60 * 1000,
+      polling: 2000,
     })
     await screenshot(page, '6-published')
     page.close()
