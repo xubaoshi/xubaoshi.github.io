@@ -18,6 +18,7 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
     ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
+  handleError(page)
   await page.goto(projectUrl)
   await page.waitFor(2000)
   await screenshot(page, 'login')
@@ -30,13 +31,11 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
   await Promise.all([$button.click(), page.waitForNavigation()])
   await page.waitFor(2000)
   await screenshot(page, 'projectList')
-  getProject(page)
+  getProject(page, browser)
   apiInspect(page, browser)
-  handleError(page)
 })()
 
-const getProject = async (page) => {
-  const $rows = await page.$$('.el-table__row')
+const getProject = async (page, browser) => {
   // 搜索按钮
   const $markInput = await page.$('[placeholder="请输入项目标识"]')
   const $searchWrap = await page.$('.operation-item')
@@ -45,6 +44,16 @@ const getProject = async (page) => {
   await $searchButton.click()
   await page.waitFor(1500)
   await screenshot(page, 'projectListSearched')
+  const $rows = await page.$$('.el-table__row')
+
+  if (!$rows || $rows.length === 0) {
+    const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+    await screenshot(page, 'projectNotFound')
+    log(`${time} 项目不存在`)
+    page.close()
+    browser.close()
+  }
+
   $rows.map(async (item) => {
     const innerTextArr = await item.$$eval('.cell', (nodes) => {
       return nodes.map((node) => {
@@ -82,6 +91,8 @@ const apiInspect = async (page, browser) => {
         } else {
           page.waitFor(500)
           await screenshot(page, 'applyFailed')
+          const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+          log(`${time}  ${body}\r`)
         }
       } else if (url.includes(historyListUrl)) {
         const res = JSON.parse(body)
@@ -95,6 +106,7 @@ const apiInspect = async (page, browser) => {
         } else {
           page.waitFor(500)
           await screenshot(page, 'publishFailed')
+          log(`${time}  ${body}\r`)
         }
       }
     })
@@ -102,18 +114,37 @@ const apiInspect = async (page, browser) => {
 }
 
 const handleError = async (page) => {
-  page.on('pageerror', (err) => {
-    console.error('pageerror:', err)
+  // pageerror
+  page.on('pageerror', async (err) => {
+    const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+    console.error('pageerror:', err.toString())
+    await screenshot(page, `pageerror-${time}`)
+    log(`${time}  ${err.toString()}\r`)
   })
-  page.on('error', (err) => {
-    console.error('error: ', err)
+  // error
+  page.on('error', async (err) => {
+    const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+    console.error('error: ', err.toString())
+    await screenshot(page, `error-${time}`)
+    screenshot(page, `error-${time}`)
+    log(`${time}  ${err.toString()}\r`)
   })
-  page.on('requestfailed', (err) => console.error('requestfailed:' + err))
+  // requestfailed
+  page.on('requestfailed', async (reg) => {
+    const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+    console.error('requestfailed:', err)
+    await screenshot(page, `requestfailed-${time}`)
+    log(
+      `${time}  requestfailed url: ${request.url()}, errText: ${
+        request.failure().errorText
+      }, method: ${request.method()}\r`
+    )
+  })
 }
 
-const screenshot = async (page, fileName, target) => {
+const screenshot = async (page, fileName) => {
   return new Promise(async (resolve) => {
-    const targetFolder = target || pathpath.join(__dirname, `/files/${current}`)
+    const targetFolder = path.join(__dirname, `/files/${current}`)
     fs.ensureDirSync(targetFolder)
     await page.screenshot({
       path: `${targetFolder}/${fileName}.png`,
@@ -122,4 +153,10 @@ const screenshot = async (page, fileName, target) => {
     })
     resolve(true)
   })
+}
+
+const log = async (content) => {
+  const targetFolder = path.join(__dirname, `/files/${current}/error.log`)
+  fs.ensureFileSync(targetFolder)
+  fs.appendFileSync(targetFolder, content)
 }
