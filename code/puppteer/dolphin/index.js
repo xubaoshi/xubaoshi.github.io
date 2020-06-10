@@ -6,7 +6,8 @@ const config = require('./config.json')
 
 const projectUrl = 'https://ctsp.kedacom.com/drelease#/projectMgt'
 const applyUrl = 'https://ctsp.kedacom.com/drelease/project/publish/apply'
-const historyListUrl = 'https://ctsp.kedacom.com/drelease/releaseApply'
+const historyListUrl =
+  'https://ctsp.kedacom.com/drelease/project/publish/release/log'
 const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
 
 ;(async () => {
@@ -14,6 +15,7 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
     headless: false,
     defaultViewport: { width: 1440, height: 1000 },
     args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   await page.goto(projectUrl)
@@ -29,7 +31,8 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
   await page.waitFor(2000)
   await screenshot(page, 'projectList')
   getProject(page)
-  apiInspect(page)
+  apiInspect(page, browser)
+  handleError(page)
 })()
 
 const getProject = async (page) => {
@@ -66,7 +69,7 @@ const triggerPublish = async (page) => {
   await $button.click()
 }
 
-const apiInspect = async (page) => {
+const apiInspect = async (page, browser) => {
   let applyId = ''
   // 接口报错截图
   page.on('response', (response) => {
@@ -76,35 +79,41 @@ const apiInspect = async (page) => {
         const res = JSON.parse(body)
         if (res.code === '0') {
           applyId = res.result.releaseApplyId
+        } else {
+          page.waitFor(500)
+          await screenshot(page, 'applyFailed')
         }
       } else if (url.includes(historyListUrl)) {
         const res = JSON.parse(body)
         if (res.code === '0') {
-          const historyList =
-            res.result.data && res.result.data.length > 0 ? res.result.data : []
-          const history = historyList.find((item) => {
-            return item.id === applyId
-          })
-          if (history.status === 15) {
+          if (res.result.deployStatus === 15) {
             console.log('发布完成！')
             await screenshot(page, 'published')
             page.close()
             browser.close()
           }
+        } else {
+          page.waitFor(500)
+          await screenshot(page, 'publishFailed')
         }
       }
     })
   })
 }
 
-const jsError = async (page) => {
-  // todo
-  // js 报错截图
+const handleError = async (page) => {
+  page.on('pageerror', (err) => {
+    console.error('pageerror:', err)
+  })
+  page.on('error', (err) => {
+    console.error('error: ', err)
+  })
+  page.on('requestfailed', (err) => console.error('requestfailed:' + err))
 }
 
-const screenshot = async (page, fileName) => {
+const screenshot = async (page, fileName, target) => {
   return new Promise(async (resolve) => {
-    const targetFolder = path.join(__dirname, `/files/${current}`)
+    const targetFolder = target || pathpath.join(__dirname, `/files/${current}`)
     fs.ensureDirSync(targetFolder)
     await page.screenshot({
       path: `${targetFolder}/${fileName}.png`,
