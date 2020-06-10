@@ -35,7 +35,7 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
     })
     await screenshot(page, '3-projectList')
     getProject(page, browser)
-    apiInspect(page, browser)
+    // apiInspect(page, browser)
   } catch (error) {
     console.log('Page jump error')
     await screenshot(page, '3-pageJumpError')
@@ -75,54 +75,85 @@ const getProject = async (page, browser) => {
         await $publish.click()
         await page.waitFor(2000)
         await screenshot(page, '5-publishDialog')
-        triggerPublish(page)
+        await triggerPublish(page)
+        await page.waitFor(4000)
+        domInspect(page, browser)
       }
     }
   })
 }
 
-const triggerPublish = async (page) => {
-  const $releaseDialog = await page.$('.releaseComponent')
-  const $button = await $releaseDialog.$('.el-button--primary')
-  await $button.click()
-}
-
-const apiInspect = async (page, browser) => {
-  let applyId = ''
-  // 接口报错截图
-  page.on('response', (response) => {
-    const url = response.url()
-    response.text().then(async (body) => {
-      if (url.includes(applyUrl)) {
-        const res = JSON.parse(body)
-        if (res.code === '0') {
-          applyId = res.result.releaseApplyId
-        } else {
-          page.waitFor(500)
-          await screenshot(page, '6-applyFailed')
-          const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
-          log(`${time}  ${body}\r`)
-          page.close()
-          browser.close()
-        }
-      } else if (url.includes(historyListUrl)) {
-        const res = JSON.parse(body)
-        if (res.code === '0') {
-          if (res.result.deployStatus === 15) {
-            console.log('发布完成！')
-            await screenshot(page, '6-published')
-            page.close()
-            browser.close()
-          }
-        } else {
-          page.waitFor(500)
-          await screenshot(page, '6-publishFailed')
-          log(`${time}  ${body}\r`)
-        }
-      }
-    })
+const triggerPublish = (page) => {
+  return new Promise(async (resolve) => {
+    const $releaseDialog = await page.$('.releaseComponent')
+    const $button = await $releaseDialog.$('.el-button--primary')
+    await $button.click()
+    resolve(true)
   })
 }
+
+const domInspect = async (page, browser) => {
+  await page.evaluate(async () => {
+    window.handleApply = function () {
+      const $rows = document.querySelectorAll('.el-table__row')
+      if ($rows && $rows.length > 0) {
+        const $row = $rows.firstChild
+        const $status = $row.querySelector('.el_state_dot')
+        console.log($status)
+        return $status && $status.innerText === '部署完成'
+      }
+    }
+  })
+
+  try {
+    await page.waitForFunction('window.handleApply()', {
+      timeout: 20 * 60 * 1000,
+    })
+    await screenshot(page, '6-published')
+    page.close()
+    browser.close()
+  } catch (error) {
+    console.log(error)
+    await screenshot(page, '6-publishFailed')
+  }
+}
+
+// const apiInspect = async (page, browser) => {
+//   let applyId = ''
+//   // 接口报错截图
+//   page.on('response', (response) => {
+//     const url = response.url()
+//     response.text().then(async (body) => {
+//       if (url.includes(applyUrl)) {
+//         const res = JSON.parse(body)
+//         if (res.code === '0') {
+//           applyId = res.result.releaseApplyId
+//         } else {
+//           page.waitFor(500)
+//           await screenshot(page, '6-applyFailed')
+//           const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+//           log(`${time}  ${body}\r`)
+//           page.close()
+//           browser.close()
+//         }
+//       } else if (url.includes(historyListUrl)) {
+//         const res = JSON.parse(body)
+//         if (res.code === '0') {
+//           if (res.result.deployStatus === 15) {
+//             console.log('发布完成！')
+//             await screenshot(page, '6-published')
+//             page.close()
+//             browser.close()
+//           }
+//         } else {
+//           page.waitFor(500)
+//           await screenshot(page, '6-publishFailed')
+//           log(`${time}  ${body}\r`)
+//         }
+//       }
+//     })
+//   })
+// }
 
 const handleError = async (page) => {
   // pageerror
@@ -143,7 +174,11 @@ const handleError = async (page) => {
   // requestfailed
   page.on('requestfailed', async (request) => {
     const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
-    console.error('requestfailed:', request)
+    console.error(
+      `${time}  requestfailed url: ${request.url()}, errText: ${
+        request.failure().errorText
+      }, method: ${request.method()}\r`
+    )
     await screenshot(page, `requestfailed-${time}`)
     log(
       `${time}  requestfailed url: ${request.url()}, errText: ${
