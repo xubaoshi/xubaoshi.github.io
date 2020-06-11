@@ -162,8 +162,6 @@ let browserWSEndpoint = ''
 })()
 ```
 
-[示例代码](/code/puppteer/browser)
-
 ## 如何等待加载
 
 往往我们使用 puppeteer 在页面执行或加载的某一时机截图或者获取页面信息。以下将等带加载的 api 分为以下三类：
@@ -204,8 +202,6 @@ const puppeteer = require('puppeteer')
 })()
 ```
 
-[示例代码](/code/puppteer/pageUtil)
-
 ### 等待元素、请求、响应
 
 1. page.waitForXPath 等待 XPath 对应的元素出现， 返回对应的 ElementHandle 实例
@@ -243,8 +239,6 @@ const puppeteer = require('puppeteer')
 })()
 ```
 
-[示例代码](/code/puppteer/pageEl)
-
 ### 自定义等待
 
 1. page.waitForFunction 等待页面中自定义函数的执行结果，返回 JsHandle 实例， 其中第一个参数要在浏览器实例上下文执行的方法
@@ -273,8 +267,6 @@ const puppeteer = require('puppeteer')
   console.log('waitForFunction finished')
 })()
 ```
-
-[示例代码](/code/puppteer/pageOther)
 
 ## 截图
 
@@ -321,8 +313,6 @@ const puppeteer = require('puppeteer')
 3. `page.$x('//img')` 获取某个 xPath 对应的所有元素
 4. `page.waitForXPath('//img')` 等待某个 xPath 对应的元素出现
 5. `page.waitForSelector('.classname')` 等待某个选择器对应的元素出现
-
-[示例代码](/code/puppteer/screen)
 
 ## 模拟用户登录
 
