@@ -8,11 +8,11 @@ header-img: 'img/node-module.jpg'
 
 # puppeteer 前端自动化测试实践
 
-## puppeteer 简介
-
 ![/img/puppeteer/puppeteer.jpg](/img/puppeteer/puppeteer.jpg)
 
-puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开发了 Chrome Headless 特性，并与之同时推出了 puppeteer， 可以理解为我们日常使用的 Chrome 的无界面版本以及对其进行操控的 js 接口套装。
+## puppeteer 简介
+
+puppeteer 中文翻译为"操纵木偶的人"，谷歌浏览器在 17 年自行开发了 Chrome Headless 特性，并与之同时推出了 puppeteer， 可以理解为我们日常使用的 Chrome 的无界面版本以及对其进行操控的 js 接口套装。
 
 使用 puppeteer 实际上是通过调用 Chrome DevTools Protocol 开放的接口与 Chrome 通信。 Chrome DevTools Protocol 的接口很复杂， puppeteer 为此封装了一些调用方便的接口供使用。
 
@@ -67,8 +67,7 @@ puppeteer 要求使用 Node v6.4.0，但实际代码中大量使用 async/await�
 
 ## Chrome 与 Chromium 区别
 
-![/img/puppeteer/chrome.jpg](/img/puppeteer/chrome.jpg)
-![/img/puppeteer/chromium.jpg](/img/puppeteer/chromium.jpg)
+![/img/puppeteer/chrome.jpg](/img/puppeteer/chrome.jpg)![/img/puppeteer/chromium.jpg](/img/puppeteer/chromium.jpg)
 
 Chromium 是谷歌为了研发 Chrome 而启动的项目，两者基于相同的源代码构建，Chrome 所有的新功能都会先在 Chromium 上实现，待验证稳定后才会移植，因此 Chromium 的版本更新频率更高，也会包含很多新的功能。
 
