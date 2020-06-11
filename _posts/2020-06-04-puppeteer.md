@@ -225,23 +225,21 @@ const puppeteer = require('puppeteer')
   const page = await browser.newPage()
   page.goto('http://www.baidu.com')
 
-  const image = await page.waitForXPath('//img')
-  console.log('image', image)
-
-  const selector = await page.waitForSelector(
-    '[href="http://xueshu.baidu.com"]'
+  await page.waitForRequest(
+    'https://www.baidu.com/img/flexible/logo/pc/result.png'
   )
-  console.log('selector', selector)
+  console.log('request loaded')
 
-  const request = await page.waitForRequest(
-    'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
+  await page.waitForResponse(
+    'https://www.baidu.com/img/flexible/logo/pc/result.png'
   )
-  console.log('request', request)
+  console.log('respone loaded')
 
-  const respone = await page.waitForResponse(
-    'https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/topnav/baiduyun@2x-e0be79e69e.png'
-  )
-  console.log('respone', respone)
+  await page.waitForXPath('//img')
+  console.log('image loaded')
+
+  await page.waitForSelector('[href="http://xueshu.baidu.com"]')
+  console.log('selector loaded')
 })()
 ```
 
@@ -379,6 +377,9 @@ const puppeteer = require('puppeteer')
 ;(async () => {
   const browser = await puppeteer.launch({
     headless: false,
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   const blockTypes = ['image']
@@ -462,6 +463,9 @@ const puppeteer = require('puppeteer')
 ;(async () => {
   const browser = await puppeteer.launch({
     headless: false,
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   await page.goto('https://www.baidu.com', {
