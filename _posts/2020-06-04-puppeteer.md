@@ -67,7 +67,11 @@ puppeteer 要求使用 Node v6.4.0，但实际代码中大量使用 async/await�
 
 ## Chrome 与 Chromium 区别
 
-![/img/puppeteer/chrome.jpg](/img/puppeteer/chrome.jpg)![/img/puppeteer/chromium.jpg](/img/puppeteer/chromium.jpg)
+<figure class="half">
+    <img src="/img/puppeteer/chrome.jpg">
+    <img src="/img/puppeteer/chromium.jpg">
+</figure>
+<!-- ![/img/puppeteer/chrome.jpg](/img/puppeteer/chrome.jpg)![/img/puppeteer/chromium.jpg](/img/puppeteer/chromium.jpg) -->
 
 Chromium 是谷歌为了研发 Chrome 而启动的项目，两者基于相同的源代码构建，Chrome 所有的新功能都会先在 Chromium 上实现，待验证稳定后才会移植，因此 Chromium 的版本更新频率更高，也会包含很多新的功能。
 
