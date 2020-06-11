@@ -35,7 +35,6 @@ const current = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
     })
     await screenshot(page, '3-projectList')
     getProject(page, browser)
-    // apiInspect(page, browser)
   } catch (error) {
     console.log('Page jump error')
     await screenshot(page, '3-pageJumpError')
@@ -93,79 +92,46 @@ const triggerPublish = (page) => {
 }
 
 const domInspect = async (page, browser) => {
-  await page.evaluate(async () => {
-    window.handleApply = function () {
-      const $rows = document.querySelectorAll('.el-table__row')
-      if ($rows && $rows.length > 0) {
-        const $row = $rows[0]
-        const $status = $row.querySelector('[prop="statusLabel"]')
-        console.log('$status.innerText:', $status.innerText)
-        let innerText = $status.innerText
-        innerText = innerText.trim ? innerText.trim() : innerText
-        return $status && innerText === '部署完成'
-      }
-    }
-  })
-
   try {
-    await page.waitForFunction('window.handleApply()', {
-      timeout: 20 * 60 * 1000,
-      polling: 2000,
+    await page.waitForSelector('.icon-fabudaobanbenzhongxin', {
+      timeout: 10 * 1000,
     })
-    await screenshot(page, '6-published')
-    page.close()
-    browser.close()
+    try {
+      await page.evaluate(async () => {
+        window.handleApply = function () {
+          const $rows = document.querySelectorAll('.el-table__row')
+          if ($rows && $rows.length > 0) {
+            const $row = $rows[0]
+            const $status = $row.querySelector('[prop="statusLabel"]')
+            let innerText = $status.innerText
+            innerText =
+              innerText && innerText.trim ? innerText.trim() : innerText
+            return $status && innerText === '部署完成'
+          }
+        }
+      })
+      await page.waitForFunction('window.handleApply()', {
+        timeout: 20 * 60 * 1000,
+        polling: 2000,
+      })
+      await screenshot(page, '6-published')
+      page.close()
+      browser.close()
+    } catch (error) {
+      const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
+      console.log(error)
+      log(`${time} ${error}`)
+      await screenshot(page, '6-publishFailed')
+    }
   } catch (error) {
+    const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
     console.log(error)
-    await screenshot(page, '6-publishFailed')
+    log(`${time} ${error}`)
+    await screenshot(page, '6-applyFailed')
   }
 }
 
-// const apiInspect = async (page, browser) => {
-//   let applyId = ''
-//   // 接口报错截图
-//   page.on('response', (response) => {
-//     const url = response.url()
-//     response.text().then(async (body) => {
-//       if (url.includes(applyUrl)) {
-//         const res = JSON.parse(body)
-//         if (res.code === '0') {
-//           applyId = res.result.releaseApplyId
-//         } else {
-//           page.waitFor(500)
-//           await screenshot(page, '6-applyFailed')
-//           const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
-//           log(`${time}  ${body}\r`)
-//           page.close()
-//           browser.close()
-//         }
-//       } else if (url.includes(historyListUrl)) {
-//         const res = JSON.parse(body)
-//         if (res.code === '0') {
-//           if (res.result.deployStatus === 15) {
-//             console.log('发布完成！')
-//             await screenshot(page, '6-published')
-//             page.close()
-//             browser.close()
-//           }
-//         } else {
-//           page.waitFor(500)
-//           await screenshot(page, '6-publishFailed')
-//           log(`${time}  ${body}\r`)
-//         }
-//       }
-//     })
-//   })
-// }
-
 const handleError = async (page) => {
-  // pageerror
-  // page.on('pageerror', async (err) => {
-  //   const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
-  //   console.error('pageerror:', err.toString())
-  //   await screenshot(page, `pageerror-${time}`)
-  //   log(`${time}  ${err.toString()}\r`)
-  // })
   // error
   page.on('error', async (err) => {
     const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')

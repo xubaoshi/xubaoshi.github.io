@@ -14,7 +14,7 @@ header-img: 'img/node-module.jpg'
 
 puppeteer 中文翻译为操纵木偶的人，谷歌浏览器在 17 年自行开发了 Chrome Headless 特性，并与之同时推出了 puppeteer， 可以理解为我们日常使用的 Chrome 的无界面版本以及对其进行操控的 js 接口套装。
 
-使用 puppeteer 实际上是通过调用 Chrome DevTools 开放的接口与 Chrome 通信。 Chrome DevTools 的接口很复杂， puppeteer 为此封装了一些调用方便的接口供使用。
+使用 puppeteer 实际上是通过调用 Chrome DevTools Protocol 开放的接口与 Chrome 通信。 Chrome DevTools Protocol 的接口很复杂， puppeteer 为此封装了一些调用方便的接口供使用。
 
 puppeteer 要求使用 Node v6.4.0，但实际代码中大量使用 async/await，需要 Node v7.6.0 及以上
 
@@ -65,6 +65,19 @@ puppeteer 要求使用 Node v6.4.0，但实际代码中大量使用 async/await�
 
 ![/img/puppeteer/headless5.png](/img/puppeteer/headless5.png)
 
+## Chrome 与 Chromium 区别
+
+![/img/puppeteer/chrome.jpg](/img/puppeteer/chrome.jpg)
+![/img/puppeteer/chromium.jpg](/img/puppeteer/chromium.jpg)
+
+Chromium 是谷歌为了研发 Chrome 而启动的项目，两者基于相同的源代码构建，Chrome 所有的新功能都会先在 Chromium 上实现，待验证稳定后才会移植，因此 Chromium 的版本更新频率更高，也会包含很多新的功能。
+
+1. Chromium 采用的 BSD 开源协议
+2. Chrome 是闭源的
+3. Chromium 不会搜集用户信息
+4. Chrome 和 Chromium 都能通过“扩展程序”增强浏览器的功能，Chrome 默认从网上应用店里安装扩展程序，而 Chromium 无法访问网上应用店，只能添加外部扩展程序
+5. Chromium 没有 Flash 和编解码器的支持，如：AROM，AAC，MP3，H.264
+
 ## puppeteer 能做什么
 
 1. puppeteer 通过封装了 Chrome DevTools Protocol 的接口，从而控制 Chromium/Chrome 浏览器的行为
@@ -109,7 +122,9 @@ const puppeteer = require('puppeteer')
   const browser = await puppeteer.launch({
     headless: false,
     slowMo: 100,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   await page.goto('https://www.baidu.com')
@@ -124,21 +139,31 @@ const puppeteer = require('puppeteer')
 let browserWSEndpoint = ''
 
 ;(async () => {
-  const browser = await puppeteer.launch({
+  const options = {
     headless: false,
     slowMo: 100,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
+  }
+  const browser = await puppeteer.launch({
+    ...options,
   })
   browserWSEndpoint = browser.wsEndpoint()
   // 从Chromium断开和puppeteer的连接
   browser.disconnect()
 
   //直接连接已经存在的 Chrome
-  const browser2 = await puppeteer.connect({ browserWSEndpoint })
+  const browser2 = await puppeteer.connect({
+    ...options,
+    browserWSEndpoint,
+  })
   const page = await browser2.newPage()
   await page.goto('https://www.baidu.com')
 })()
 ```
+
+[示例代码](/code/puppteer/browser)
 
 ## 如何等待加载
 
@@ -146,7 +171,7 @@ let browserWSEndpoint = ''
 
 ### 加载导航页面
 
-1. page.goto 代开新页面
+1. page.goto 打开新页面
 2. page.goBack 回退到上一个页面
 3. page.goForward 前进到下一个页面
 4. page.reload 重新加载页面
@@ -166,7 +191,9 @@ const puppeteer = require('puppeteer')
   const browser = await puppeteer.launch({
     slowMo: 100,
     headless: false,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   await page.goto('http://www.baidu.com', {
@@ -177,6 +204,8 @@ const puppeteer = require('puppeteer')
   console.log('page load finished!')
 })()
 ```
+
+[示例代码](/code/puppteer/pageUtil)
 
 ### 等待元素、请求、响应
 
@@ -190,7 +219,9 @@ const puppeteer = require('puppeteer')
   const browser = await puppeteer.launch({
     slowMo: 100,
     headless: false,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   page.goto('http://www.baidu.com')
@@ -215,6 +246,8 @@ const puppeteer = require('puppeteer')
 })()
 ```
 
+[示例代码](/code/puppteer/pageEl)
+
 ### 自定义等待
 
 1. page.waitForFunction 等待页面中自定义函数的执行结果，返回 JsHandle 实例， 其中第一个参数要在浏览器实例上下文执行的方法
@@ -227,7 +260,9 @@ const puppeteer = require('puppeteer')
   const browser = await puppeteer.launch({
     slowMo: 100,
     headless: false,
-    args: ['--no-sandbox', '--window-size=1280,960'],
+    defaultViewport: { width: 1440, height: 1000 },
+    args: [`--window-size=${1440},${1000}`],
+    ignoreHTTPSErrors: false, //忽略 https 报错
   })
   const page = await browser.newPage()
   await page.goto('http://www.baidu.com')
@@ -241,6 +276,8 @@ const puppeteer = require('puppeteer')
   console.log('waitForFunction finished')
 })()
 ```
+
+[示例代码](/code/puppteer/pageOther)
 
 ## 截图
 
@@ -287,6 +324,8 @@ const puppeteer = require('puppeteer')
 3. `page.$x('//img')` 获取某个 xPath 对应的所有元素
 4. `page.waitForXPath('//img')` 等待某个 xPath 对应的元素出现
 5. `page.waitForSelector('.classname')` 等待某个选择器对应的元素出现
+
+[示例代码](/code/puppteer/screen)
 
 ## 模拟用户登录
 

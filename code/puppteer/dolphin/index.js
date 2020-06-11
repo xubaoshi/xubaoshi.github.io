@@ -143,7 +143,11 @@ const handleError = async (page) => {
   // requestfailed
   page.on('requestfailed', async (request) => {
     const time = moment(new Date()).format('YYYY-MM-DD-HH-mm-ss')
-    console.error('requestfailed:', request)
+    console.error(
+      `${time}  requestfailed url: ${request.url()}, errText: ${
+        request.failure().errorText
+      }, method: ${request.method()}\r`
+    )
     await screenshot(page, `requestfailed-${time}`)
     log(
       `${time}  requestfailed url: ${request.url()}, errText: ${
