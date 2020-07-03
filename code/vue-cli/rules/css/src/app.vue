@@ -6,6 +6,9 @@
     <div class="red">
       scope
     </div>
+    <div :class="a.rebeccapurple">
+      module.a
+    </div>
     <div :class="moduleCss.blue">
       module css
     </div>
@@ -19,7 +22,7 @@ export default {
   name: 'App',
   data() {
     return {
-      moduleCss
+      moduleCss,
     }
   },
   mounted() {
@@ -39,5 +42,10 @@ export default {
 <style scoped>
 .red {
   color: red;
+}
+</style>
+<style module="a">
+.rebeccapurple {
+  color: rebeccapurple
 }
 </style>
