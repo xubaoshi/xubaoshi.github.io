@@ -17,7 +17,7 @@
 <script>
 import './css/style.css'
 import img from './img/big.png'
-import moduleCss from './css/style.module.css'
+import moduleCss from './css/test.module.css'
 export default {
   name: 'App',
   data() {
@@ -46,6 +46,6 @@ export default {
 </style>
 <style module="a">
 .rebeccapurple {
-  color: rebeccapurple
+  color: rebeccapurple;
 }
 </style>
