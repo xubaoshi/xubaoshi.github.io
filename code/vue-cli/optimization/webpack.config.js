@@ -4,7 +4,6 @@ const path = require('path')
 module.exports = {
   entry: {
     entry: './src/index.js',
-    entry1: './src/index1.js',
   },
   output: {
     path: path.join(__dirname, './dist'),
@@ -18,16 +17,16 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      minSize: 20,
+      // minSize: 20,
+      // minChunks: 1,
       cacheGroups: {
         vendors: {
-          name: 'chunk-vendors',
           chunks: 'initial',
+          name: 'chunk-vendors',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
         },
         default: {
-          name: 'chunk-common',
           chunks: 'initial',
           name: 'chunk-common',
           minChunks: 2,

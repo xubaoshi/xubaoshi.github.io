@@ -1,8 +1,9 @@
 import vue from 'vue'
 import vuex from 'vuex'
-import common from './common.js'
+import jquery from './jquery.js'
+
 
 console.log('vue', vue)
 console.log('vuex', vuex)
 console.log('this is c')
-console.log(common.name1)
+console.log(jquery)
