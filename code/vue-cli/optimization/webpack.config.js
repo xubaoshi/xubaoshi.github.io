@@ -2,7 +2,10 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    entry: './src/index.js',
+    entry1: './src/index1.js',
+  },
   output: {
     path: path.join(__dirname, './dist'),
     filename: '[name].js',
@@ -15,18 +18,18 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      chunks: 'all',
-      minSize: 10,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      name: true,
+      minSize: 20,
       cacheGroups: {
         vendors: {
+          name: 'chunk-vendors',
+          chunks: 'initial',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
         },
         default: {
+          name: 'chunk-common',
+          chunks: 'initial',
+          name: 'chunk-common',
           minChunks: 2,
           priority: -20,
           reuseExistingChunk: true,
