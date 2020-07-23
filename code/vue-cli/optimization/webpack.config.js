@@ -17,7 +17,6 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      // minSize: 20,
       // minChunks: 1,
       cacheGroups: {
         vendors: {
@@ -31,7 +30,7 @@ module.exports = {
           name: 'chunk-common',
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
+          // reuseExistingChunk: true,
         },
       },
     },
