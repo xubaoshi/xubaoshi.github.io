@@ -3,7 +3,7 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    entry: './src/index.js',
+    entry1: './src/entry1.js',
   },
   output: {
     path: path.join(__dirname, './dist'),
@@ -26,11 +26,12 @@ module.exports = {
           priority: -10,
         },
         default: {
-          chunks: 'initial',
+          chunks: 'async',
           name: 'chunk-common',
+          minSize: 200,
           minChunks: 2,
           priority: -20,
-          // reuseExistingChunk: true,
+          reuseExistingChunk: true,
         },
       },
     },
