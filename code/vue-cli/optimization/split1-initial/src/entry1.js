@@ -1,7 +1,7 @@
-import vue from 'vue'
-import vuex from 'vuex'
+import reactDom from 'react-dom'
+import elementui from 'element-ui'
 import jquery from './jquery'
 
-console(vue)
-console(vuex)
+console(reactDom)
+console(elementui)
 console(jquery)

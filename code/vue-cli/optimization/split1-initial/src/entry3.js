@@ -1,5 +1,7 @@
-import vuex from 'vuex'
-import axios from 'axios'
+import reactDom from 'react-dom'
+import elementui from 'element-ui'
+import echarts from 'echarts'
 
-console(vuex)
-console(axios)
+console(echarts)
+console(elementui)
+console(reactDom)

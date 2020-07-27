@@ -1,7 +1,7 @@
-import vue from 'vue'
-import axios from 'axios'
+import reactDom from 'react-dom'
+import echarts from 'echarts'
 import jquery from './jquery'
 
-console(vue)
-console(axios)
+console(reactDom)
+console(echarts)
 console(jquery)
