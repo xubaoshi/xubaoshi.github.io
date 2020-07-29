@@ -36,23 +36,22 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      chunks: 'all',
-      minSize: 0,
-      minChunks: 1,
-      // cacheGroups: {
-      //   vendors: {
-      //     name: 'chunk-vendors',
-      //     test: /[\\/]node_modules[\\/]/,
-      //     priority: -10,
-      //   },
-      //   default: {
-      //     chunks: 'initial',
-      //     name: 'chunk-common',
-      //     minChunks: 2,
-      //     priority: -20,
-      //     reuseExistingChunk: true,
-      //   },
-      // },
+      cacheGroups: {
+        vendors: {
+          chunks: 'initial',
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+        },
+        default: {
+          chunks: 'initial',
+          name: 'chunk-common',
+          minChunks: 2,
+          minSize: 0,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
     },
   },
 }

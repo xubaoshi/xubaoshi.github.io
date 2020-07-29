@@ -1,7 +1,7 @@
-import reactDom from 'react-dom'
+import vue from 'vue'
 import elementui from 'element-ui'
 import jquery from './jquery'
 
-console(reactDom)
+console(vue)
 console(elementui)
 console(jquery)

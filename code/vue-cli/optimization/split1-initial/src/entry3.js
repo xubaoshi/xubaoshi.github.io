@@ -1,7 +1,7 @@
-import reactDom from 'react-dom'
+import vue from 'vue'
 import elementui from 'element-ui'
 import echarts from 'echarts'
 
-console(echarts)
+console(vue)
 console(elementui)
-console(reactDom)
+console(echarts)
