@@ -36,22 +36,10 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      cacheGroups: {
-        vendors: {
-          chunks: 'initial',
-          name: 'chunk-vendors',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-        },
-        default: {
-          chunks: 'initial',
-          name: 'chunk-common',
-          minChunks: 2,
-          minSize: 0,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
+      chunks: 'all',
+      minChunks: 1,
+      minSize: 1,
+      maxInitialRequests: 30,
     },
   },
 }

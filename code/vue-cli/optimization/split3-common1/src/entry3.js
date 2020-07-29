@@ -4,4 +4,4 @@ import echarts from 'echarts'
 
 console(vue)
 console(elementui)
-console(reactDom)
+console(echarts)
