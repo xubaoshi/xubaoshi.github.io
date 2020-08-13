@@ -49,142 +49,23 @@
     type="text/css"
   />
 
-  <!-- GrowingIO Analytics code version 2.1 -->
-  <!-- Copyright 2015-2018 GrowingIO, Inc. More info available at http://www.growingio.com -->
+<!-- GrowingIO Analytics code version 2.1 -->
+<!-- Copyright 2015-2018 GrowingIO, Inc. More info available at http://www.growingio.com -->
 
-  <!-- <script type='text/javascript'>
-        !function (e, t, n, g, i) { e[i] = e[i] || function () { (e[i].q = e[i].q || []).push(arguments) }, n = t.createElement("script"), tag = t.getElementsByTagName("script")[0], n.async = 1, n.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + g, tag.parentNode.insertBefore(n, tag) }(window, document, "script", "assets.giocdn.com/2.1/gio.js", "gio");
-        gio('init', 'b128b8513bbcdea8', {});
+<script type='text/javascript'>
+!function(e,t,n,g,i){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},n=t.createElement("script"),tag=t.getElementsByTagName("script")[0],n.async=1,n.src=('https:'==document.location.protocol?'https://':'http://')+g,tag.parentNode.insertBefore(n,tag)}(window,document,"script","assets.giocdn.com/2.1/gio.js","gio");
+  gio('init','a200f4e8fce7fe7e', {});
 
-        //custom page code begin here
+//custom page code begin here
 
-        //custom page code end here
+//custom page code end here
 
-        gio('send');
+gio('send');
 
-    </script> -->
+</script>
 
-  <!-- End GrowingIO Analytics code version: 2.1 -->
+<!-- End GrowingIO Analytics code version: 2.1 -->
 
-  <!-- <script>var jyc_begin = new Date().getTime();</script>
-
-    <script type="text/javascript">
-        (function () {
-            if (window.zhuge) return;
-            window.zhuge = [];
-            window.zhuge.methods = "_init identify track getDid getSid getKey setSuperProperty setUserProperties setWxProperties setPlatform".split(" ");
-            window.zhuge.factory = function (b) {
-                return function () {
-                    var a = Array.prototype.slice.call(arguments);
-                    a.unshift(b);
-                    window.zhuge.push(a);
-                    return window.zhuge;
-                }
-            };
-            for (var i = 0; i < window.zhuge.methods.length; i++) {
-                var key = window.zhuge.methods[i];
-                window.zhuge[key] = window.zhuge.factory(key);
-            }
-            window.zhuge.load = function (b, x) {
-                if (!document.getElementById("zhuge-js")) {
-                    var a = document.createElement("script");
-                    var verDate = new Date();
-                    var verStr = verDate.getFullYear().toString() + verDate.getMonth().toString() + verDate.getDate().toString();
-
-                    a.type = "text/javascript";
-                    a.id = "zhuge-js";
-                    a.async = !0;
-                    a.src = 'https://zgsdk.zhugeio.com/zhuge.min.js?v=' + verStr;
-                    a.onerror = function () {
-                        window.zhuge.identify = window.zhuge.track = function (ename, props, callback) {
-                            if (callback && Object.prototype.toString.call(callback) === '[object Function]') {
-                                callback();
-                            } else if (Object.prototype.toString.call(props) === '[object Function]') {
-                                props();
-                            }
-                        };
-                    };
-                    var c = document.getElementsByTagName("script")[0];
-                    c.parentNode.insertBefore(a, c);
-                    window.zhuge._init(b, x)
-                }
-            };
-            window.zhuge.load('0106cb6de0f54cf1be6cb84911137956', { //配置应用的AppKey
-                superProperty: { //全局的事件属性(选填)
-                    '应用名称': '诸葛io'
-                },
-                adTrack: false,//广告监测开关，默认为false
-                autoTrack: false,
-                //启用全埋点采集（选填，默认false）
-                singlePage: false //是否是单页面应用（SPA），启用autoTrack后生效（选填，默认false）
-            });
-        })();
-    </script> -->
-
-  <script>
-    ;(function(para) {
-      var p = para.sdk_url,
-        n = para.name,
-        w = window,
-        d = document,
-        s = 'script',
-        x = null,
-        y = null
-      if (typeof w['sensorsDataAnalytic201505'] !== 'undefined') {
-        return false
-      }
-      w['sensorsDataAnalytic201505'] = n
-      w[n] =
-        w[n] ||
-        function(a) {
-          return function() {
-            ;(w[n]._q = w[n]._q || []).push([a, arguments])
-          }
-        }
-      var ifs = [
-        'track',
-        'quick',
-        'register',
-        'registerPage',
-        'registerOnce',
-        'trackSignup',
-        'trackAbtest',
-        'setProfile',
-        'setOnceProfile',
-        'appendProfile',
-        'incrementProfile',
-        'deleteProfile',
-        'unsetProfile',
-        'identify',
-        'login',
-        'logout',
-        'trackLink',
-        'clearAllRegister',
-        'getAppStatus'
-      ]
-      for (var i = 0; i < ifs.length; i++) {
-        w[n][ifs[i]] = w[n].call(null, ifs[i])
-      }
-      if (!w[n]._t) {
-        ;(x = d.createElement(s)), (y = d.getElementsByTagName(s)[0])
-        x.async = 1
-        x.src = p
-        x.setAttribute('charset', 'UTF-8')
-        w[n].para = para
-        y.parentNode.insertBefore(x, y)
-      }
-    })({
-      sdk_url:
-        'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/sensorsdata.min.js',
-      heatmap_url:
-        'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.14.9/heatmap.min.js',
-      name: 'sensors',
-      server_url:
-        'https://sademo.datasink.sensorsdata.cn/sa?token=******&project=B2BDemo',
-        heatmap: {}
-    })
-    sensors.quick('autoTrack')
-  </script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
