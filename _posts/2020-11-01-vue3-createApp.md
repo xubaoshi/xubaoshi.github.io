@@ -398,7 +398,7 @@ git clone https://github.com/vuejs/vue-next.git
 
 项目下载后打开项目
 
-![/imgs/start/1.png](/imgs/start/1.png)
+![/img/vue3/start/1.png](/img/vue3/start/1.png)
 
 vue 项目主要包含 3 个文件夹： packages、scripts、test-tds
 
@@ -408,7 +408,7 @@ vue 项目主要包含 3 个文件夹： packages、scripts、test-tds
 
 ## packages 文件夹结构分析
 
-![/imgs/start/2.png](/imgs/start/2.png)
+![/img/vue3/start/2.png](/img/vue3/start/2.png)
 
 - compiler-core 编译-vue 核心
 - compiler-dom 编译-dom 部分（浏览器）
@@ -668,7 +668,7 @@ createAppAPI 方法直接返回 createApp 函数， createApp 方法中 rootComp
 - 创建 app，挂载属性和函数
 - 返回 app
 
-![/imgs/start/3.png](/imgs/start/3.png)
+![/img/vue3/start/3.png](/img/vue3/start/3.png)
 
 此时的 app 为后面的 mount 方法准备所需要用到的函数。
 
