@@ -219,6 +219,7 @@ export default new JSErrors();
 ```
 以上通过 `window.onerror` 监听 js 报错。<br />
 <br />traceInfo 方法实现的逻辑如下：
+
 ```javascript
 public traceInfo() {
   // ...
@@ -233,6 +234,7 @@ public traceInfo() {
 ```
 
 1. 记录错误
+
 ```javascript
 private handleRecordError() {
   try {
