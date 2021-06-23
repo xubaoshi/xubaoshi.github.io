@@ -146,10 +146,7 @@ const ClientMonitor = {
 
 export default ClientMonitor;
 ```
-<a name="dEmBS"></a>
-## 
-<a name="B4Ckm"></a>
-##错误监控
+## 错误监控
 
 <br />`src/monitor.ts`
 ```javascript
@@ -497,41 +494,35 @@ register(configs: CustomOptionsType) {
 <a name="QmZh1"></a>
 #### 触发 xhrReadyStateChange 事件
 
-1.  初始化对象及处理 url
+1.初始化对象及处理 url
 
 ![/img/skywalking/7.png](/img/skywalking/7.png)
 
-2. 判断当前接口是否在不跟踪的接口列表内
+2.判断当前接口是否在不跟踪的接口列表内
 
 ![/img/skywalking/8.png](/img/skywalking/8.png)
 
-3. 排除不需要上报的接口地址以及追踪开关是否开启
+3.排除不需要上报的接口地址以及追踪开关是否开启
 
 ![/img/skywalking/9.png](/img/skywalking/9.png)
 
-4. 当  XMLHttpRequest  中  readyState 为 1 时，即表示已调用send()方法正在向服务端发送请求，此时生成  traceId 、接口开始时间、数据并设置请求头、segCollector 数组增加一个新的对象如下：
+4.当  XMLHttpRequest  中  readyState 为 1 时，即表示已调用send()方法正在向服务端发送请求，此时生成  traceId 、接口开始时间、数据并设置请求头、segCollector 数组增加一个新的对象如下：
 
 ![/img/skywalking/10.png](/img/skywalking/10.png)
 
-5. 当  XMLHttpRequest  中  readyState 为 4 时 表示请求完成， 遍历 segCollector 如果中的对象满足 `segCollector[i].event.readyState === 4` 构建 exitSpan 对象并存储到 segent 对象上并在 segCollector  剔除掉。
+5.当  XMLHttpRequest  中  readyState 为 4 时 表示请求完成， 遍历 segCollector 如果中的对象满足 `segCollector[i].event.readyState === 4` 构建 exitSpan 对象并存储到 segent 对象上并在 segCollector  剔除掉。
 
-
-<br />![/img/skywalking/11.png](/img/skywalking/11.png)<br />
-
-<a name="Q3QBO"></a>
 #### 上报收集到的消息
 
 
-1.  监听浏览器  `onbeforeunload ` 事件后统一将收集到的信息上报上去。
+1.监听浏览器  `onbeforeunload ` 事件后统一将收集到的信息上报上去。
 
 
 <br />![/img/skywalking/12.png](/img/skywalking/12.png)
 
-2. 定时发送
+2.定时发送
 
-![/img/skywalking/13.png](/img/skywalking/13.png)<br />
-
-<a name="LVrlS"></a>
+![/img/skywalking/13.png](/img/skywalking/13.png)
 ## Performance
 `src/monitor.ts`
 ```javascript
@@ -564,7 +555,7 @@ performance(configs: any) {
 <a name="saqzE"></a>
 ### document.readyState
 
-<br />0-UNINITIALIZED：XML 对象被产生，但没有任何文件被加载。<br />1-LOADING：加载程序进行中，但文件尚未开始解析。<br />2-LOADED：部分的文件已经加载且进行解析，但对象模型尚未生效。<br />3-INTERACTIVE：仅对已加载的部分文件有效，在此情况下，对象模型是有效但只读的。<br />4-COMPLETED：文件已完全加载，代表加载成功。<br />​<br />
+0-UNINITIALIZED：XML 对象被产生，但没有任何文件被加载。<br />1-LOADING：加载程序进行中，但文件尚未开始解析。<br />2-LOADED：部分的文件已经加载且进行解析，但对象模型尚未生效。<br />3-INTERACTIVE：仅对已加载的部分文件有效，在此情况下，对象模型是有效但只读的。<br />4-COMPLETED：文件已完全加载，代表加载成功。<br />​<br />
 <a name="YeZiK"></a>
 ### window.addEventListener('load', () => {})
 
