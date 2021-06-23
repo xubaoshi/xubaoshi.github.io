@@ -863,8 +863,6 @@ export default class LoganDB {
 
 ```
 <a name="vL9Xl"></a>
-### 
-<a name="qRkJD"></a>
 ### logWithEncryption
 
 <br />`src/index.ts`<br />​<br />
