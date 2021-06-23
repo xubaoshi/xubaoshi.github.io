@@ -149,7 +149,7 @@ export default ClientMonitor;
 <a name="dEmBS"></a>
 ## 
 <a name="B4Ckm"></a>
-## 错误监控
+##错误监控
 
 <br />`src/monitor.ts`
 ```javascript
