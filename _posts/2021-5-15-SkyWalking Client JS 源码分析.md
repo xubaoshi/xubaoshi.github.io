@@ -490,8 +490,8 @@ register(configs: CustomOptionsType) {
 <br />![/img/skywalking/4.png](/img/skywalking/4.png)<br />
 <br />上面的代码主要做了 XMLHttpRequest 做了二次封装，并将 window 的原始 XMLHttpRequest 方法进行了重新赋值。其中内部的 customizedXHR 方法中：<br />
 <br />![/img/skywalking/5.png](/img/skywalking/5.png)<br />
-<br />上述方法中监听了 XMLHttpRequest  readystatechange 事件，并触发了通过 ` const ajaxEvent = new CustomEvent(event, { detail: this })` 定义的自定义事件 `xhrReadyStateChange`。<br />
-<br />其中将涉及到的参数存入到 `getRequestConfig` 中：<br />
+<br />上述方法中监听了 XMLHttpRequest  readystatechange 事件，并触发了通过 ` const ajaxEvent = new CustomEvent(event, { detail: this })` 定义的自定义事件 xhrReadyStateChange。<br />
+<br />其中将涉及到的参数存入到 getRequestConfig 中：<br />
 <br />![/img/skywalking/6.png](/img/skywalking/6.png)<br />以上就是为了能暂存请求参数及配置。<br />
 
 <a name="QmZh1"></a>
