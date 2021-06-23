@@ -115,27 +115,26 @@ const reportResult = await Logan.report({
 <a name="QNvfa"></a>
 ### initConfig
 
-<br />`src/index.ts`<br />​<br />
+`src/index.ts`  
 
 1. 传入外部配置
+
 ```javascript
 import Config from './global-config';
-
 // ...
-
 export function initConfig (globalConfig: GlobalConfig): void {
     Config.set(globalConfig);
 }
-
 export default {
   // ...
   initConfig
 }
 ```
 
-<br />`src/global-config.ts`<br />​<br />
+`src/global-config.ts`  
 
 2. 通过 typeof 判断出入的配置是否可以覆盖
+
 ```javascript
 // ...
 
@@ -167,8 +166,7 @@ export default {
 <a name="r55rZ"></a>
 ### log
 
-<br />`src/index.ts`<br />​<br />
-<a name="v3JsB"></a>
+src/index.ts`  
 #### 数据处理及逻辑判断
 ```javascript
 
@@ -264,12 +262,10 @@ export default {
   log
 }
 ```
-webpack 中拦截加载的说明参考如下:<br />[https://webpack.docschina.org/guides/lazy-loading/](https://webpack.docschina.org/guides/lazy-loading/)<br />
-
-<a name="Nw96Y"></a>
+webpack 中拦截加载的说明参考如下:<br />[https://webpack.docschina.org/guides/lazy-loading/](https://webpack.docschina.org/guides/lazy-loading/)
 #### 是否可以存储日志
 
-<br /> `src/log-manager.ts`<br />​
+`src/log-manager.ts`  ​
 
 LogManager.canSave 实现逻辑如下 :
 ```javascript
@@ -298,13 +294,13 @@ export default {
 };
 ```
 ​
-
 LogManager 内部主要做了一个计数器的作用，如果 Logan 存储失败了 logTryTimes（默认为 3 次） 次数后将不再进行后续日志的存储。<br />​<br />
 <a name="cZArE"></a>
 #### 保存日志操作
 ​
 
-`src/save-log.ts` :<br />​<br />
+`src/save-log.ts` :
+
 ```javascript
 // ...
 import Config from './global-config';
@@ -428,7 +424,7 @@ export function invokeInQueue (asyncF: Function): Promise<any> {
 #### IndexedDB
 ​
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/1747286/1623836233453-e1a8da8f-f55a-4bfd-a49b-a4ea5231b0b5.png#clientId=u3c5d477e-b462-4&from=paste&height=494&id=u421cc4c4&margin=%5Bobject%20Object%5D&name=image.png&originHeight=494&originWidth=1346&originalType=binary&ratio=1&size=85904&status=done&style=none&taskId=u67507591-d97f-4da4-b63e-e7c02e53f09&width=1346)<br />
+![/img/logan/3.png](/img/logan/3.png)<br />
 
 <a name="TcfeI"></a>
 ##### 浏览器上的存储
