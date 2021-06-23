@@ -71,24 +71,18 @@ Logan.logWithEncryption('confidentialLogContent', 1);
 import Logan from 'logan-web';
 let logContent = 'Your log content';
 let logType = 1;
-
 Logan.log(logContent, logType);
 ```
-使用 `log` 方法可以将本地日志按序保存在浏览器的 IndexedDB 库中。<br />​<br />
-<a name="KpWEZ"></a>
+使用 log 方法可以将本地日志按序保存在浏览器的 IndexedDB 库中。
 #### logWithEncryption
 ​
-
 需要调用 logWithEncryption() 方法对本地日志进行加密操作，那么你必须事先配置该公钥。与该公钥配对的私钥存储于你的服务器上<br />​<br />
 
 - content: 日志内容。
 - logType: 日志类型。自定义的日志类型。
-
-​<br />
-<a name="EJycJ"></a>
 #### report
 
-<br />会从本地 DB 库中获取指定天的日志逐天进行上报。<br />​<br />
+会从本地 DB 库中获取指定天的日志逐天进行上报。
 
 - fromDayString: 上报该天及之后的日志，YYYY-MM-DD 格式。
 - toDayString: 上报该天及之前的日志，YYYY-MM-DD 格式.
